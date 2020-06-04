@@ -22,7 +22,7 @@ libra_local_account = LocalAccount(libra_account.address, libra_account, libra_a
 with open("./pyscripts/token_exchange_abi.json") as json_file:
     abi_json = json.load(json_file)
 
-tk_exchange = Contract.from_abi('Token', address="0x5831dE8826c01CC7fB165b30D59356D9BA27886F", abi=abi_json,
+tk_exchange = Contract.from_abi('Token', address="0xB214D7c87E4EC452E914D59FFC284719Bc072326", abi=abi_json,
                        owner=pirot_local_account)
 
 with open("./pyscripts/token_abi.json") as json_file:
@@ -45,11 +45,13 @@ print("Is Frama a admin? {} \nIs Frama a broker? {}".format(
 print("Is Libra a admin? {} \nIs Libra a broker? {}".format(
    tk_exchange.isAdmin(libra_local_account.address), tk_exchange.isBroker(libra_local_account.address)))
 
-print("Is the market open?")
-while True:
-    if tk_exchange.isOpen():
-        print("Yes")
-        time.sleep(60)
-    else:
-        print("No, try later")
-        break
+#print("Is the market open?")
+#while True:
+#    if tk_exchange.isOpen():
+#        print("Yes")
+#        time.sleep(60)
+#    else:
+#        print("No, try later")
+#        break
+
+tk_exchange.buy(1000)
