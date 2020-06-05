@@ -95,6 +95,7 @@ contract token_exchange is BrokerRole, AdminRole, PayCoin { //inheriting PayCoin
 /*
     function _sell(address seller, uint256 amount) internal {
         // TODO: Implement allowances for transferFrom
+        // token_exchange != team, so it can mint paycoin (these doesn't count vs initial 50k)
 
         //PayCoin pcn = PayCoin(_addressPC);
         //pcn.transfer(seller,getFee(amount, false));
@@ -129,7 +130,7 @@ contract token_exchange is BrokerRole, AdminRole, PayCoin { //inheriting PayCoin
     }
     /*
         TODO What is id_prezzo?
-            If integer (1, 2, 3, etc) maybe priceHistory should be an array ( priceHistory[] )
+            ** If integer (1, 2, 3, etc) maybe priceHistory should be an array ( priceHistory[] )
             If hash/something else, then mapping. So, we need two more global variables (last_price id and last_price)
     */
     /*
