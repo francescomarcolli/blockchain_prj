@@ -2,21 +2,21 @@ pragma solidity ^0.5.0;
 
 
 import "./PayCoin.sol";
-
 import "../interfaces/IT_ERC20.sol";
 import "./token_erc20.sol";
 import "./BrokerRole.sol";
 import "./AdminRole.sol";
 
-contract token_exchange is BrokerRole, AdminRole, PayCoin { //inheriting PayCoin is not "right", but it's the only solution we found at the present time.
+contract token_exchange is BrokerRole, AdminRole {
     using SafeMath for uint256;
 
     IT_ERC20 public token;
+    IT_PayCoin public payCoin;
     uint256 private tk_price;
     uint256 private _openingtime;
     uint256 private _closingtime;
 
-    mapping (uint256 => uint256) priceHistory;
+    uint256[] priceHistory;
 
     //address _addressPC ;
     //= 0xc429620C4451d820B96FD3E5209FADa0F5a89852
@@ -36,10 +36,14 @@ contract token_exchange is BrokerRole, AdminRole, PayCoin { //inheriting PayCoin
     constructor() public {
 
         token = new token_erc20();
+        payCoin = new PayCoin();
+
         tk_price = 1e18 ; //accounts for PayCoin's decimals
+        priceHistory.push(tk_price);
+
         _openingtime = now ;
-        _closingtime = now + 5 minutes ;
-        //_addressPC = addressPC ;
+        _closingtime = now + 1 hours ; //TODO Remember to modify it!
+
 
         if (!(isAdmin(_frama) && isBroker(_frama))){
             addAdmin(_frama);
@@ -73,38 +77,34 @@ contract token_exchange is BrokerRole, AdminRole, PayCoin { //inheriting PayCoin
         require(msg.value > 0, "You have to pay, my friend");
         require(msg.value == getFee(tokenAmount), "That's not enough money!");
         */
-        require(!(token.isMinter(_msgSender())), "You can't buy your own tokens, my friend");
+        //require(!(token.isMinter(_msgSender())), "You can't buy your own tokens, my friend");
 
-        //_sell(_msgSender(), tokenAmount.mul(10**uint256(token.decimals())));
+        _sell(_msgSender(), tokenAmount.mul(10**uint256(token.decimals())));
 
         return true;
     }
 
     function _buy(address recipient, uint256 amount) internal {
         // TODO Implement allowances for transferFrom
-
-        //PayCoin pcn = PayCoin(_addressPC);
-        //pcn.transferFrom(recipient, address(this), getFee(amount));
-        transfer(address(this), getFee(amount, true));
+        // TODO set real address of the team
+        payCoin.transferFrom(recipient, address(this), getFee(amount, true));
 
         token.mint(recipient, amount);
-        //token.increaseAllowance(recipient, amount);
 
         emit Buy(recipient, amount, tk_price);
     }
-/*
+
     function _sell(address seller, uint256 amount) internal {
         // TODO: Implement allowances for transferFrom
         // token_exchange != team, so it can mint paycoin (these doesn't count vs initial 50k)
 
-        //PayCoin pcn = PayCoin(_addressPC);
-        //pcn.transfer(seller,getFee(amount, false));
+        token.burnFrom(seller, amount);
 
-        token.transferFrom(seller, address(this), amount);
+        payCoin.mint(seller,getFee(amount, false));
 
         emit Sell(address(this), amount, tk_price);
     }
-*/
+
     function getFee(uint256 amount, bool from_buy) public returns (uint256){
         // TODO: Implement different fees for buying and selling
         // amount * tk_price / 10^18 +- 2*amount/1000
@@ -133,11 +133,11 @@ contract token_exchange is BrokerRole, AdminRole, PayCoin { //inheriting PayCoin
             ** If integer (1, 2, 3, etc) maybe priceHistory should be an array ( priceHistory[] )
             If hash/something else, then mapping. So, we need two more global variables (last_price id and last_price)
     */
-    /*
+
     function lastPrice() external view returns (uint256, uint256){
-        return (last_price_id, last_price);
+        return (priceHistory.length.sub(1), priceHistory[priceHistory.length.sub(1)]);
     }
-    */
+
 
 
 
