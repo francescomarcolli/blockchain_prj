@@ -9,9 +9,8 @@ import "OpenZeppelin/openzeppelin-contracts@2.5.0/contracts/token/ERC20/ERC20Det
 
 contract PayCoin is Context, IT_PayCoin, ERC20Detailed, ERC20Burnable, BurnerRole{
 
-    address _superUser = 0x743491ab1511287491af8De4Ca25b2fbc707eB88 ;
+    address _superUser = 0x85A8d7241Ffffee7290501473A9B11BFdA2Ae9Ff ;
     address _exchange = 0x5831dE8826c01CC7fB165b30D59356D9BA27886F ;
-    //address _pirot = 0x743491ab1511287491af8De4Ca25b2fbc707eB88 ;
 
     //Constructor meant to be called on deploy
     constructor () public ERC20Detailed("PayCoin", "PaC", 18){
@@ -23,12 +22,6 @@ contract PayCoin is Context, IT_PayCoin, ERC20Detailed, ERC20Burnable, BurnerRol
             addMinter(_exchange);
             addBurner(_exchange);
         }
-        /*
-        if (!(isMinter(_pirot) && isBurner(_pirot))){
-            addMinter(_pirot);
-            addBurner(_pirot);
-        }
-        */
     }
 
     function burn(uint256 amount) public onlyBurner {
