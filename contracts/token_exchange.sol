@@ -157,24 +157,29 @@ contract token_exchange is BrokerRole, AdminRole {
     function setNewPrice(int256 delta_price) onlyBroker public returns (uint256) {
         uint256 last_price = priceHistory[priceHistory.length.sub(1)]; 
         int256 new_price = int256(last_price) + delta_price; 
-        uint256 new_length; 
+        uint256 last_id_price; 
 
         require (new_price > 0, "Price must be positive!"); 
         
         if (isAdmin(_msgSender())) {
             require(isOpen(), "Market is closed"); 
-            emit PriceChange(_msgSender(), new_length, uint256(new_price)); 
+            
+            setHistory(uint256(new_price));
+            last_id_price = priceHistory.length.sub(1);
+            
+            emit PriceChange(_msgSender(), last_id_price, uint256(new_price)); 
         }
         else{
             require(_overnightCalls < 4, "Already calls 4 times this night."); 
             require( uint256(new_price) > last_price.sub(last_price.mul(10).div(100)) && uint256(new_price) < last_price.add(last_price.mul(10).div(100)), "Can't change more than -+10%" ); 
+            
+            setHistory(uint256(new_price));
+            last_id_price = priceHistory.length.sub(1);
+            
             _overnightCalls += 1; 
         }
 
-        setHistory(uint256(new_price));
-        new_length = priceHistory.length.sub(1); 
-
-        return new_length; 
+        return last_id_price; 
     }
 
 
