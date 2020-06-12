@@ -1,8 +1,9 @@
 pragma solidity ^0.5.0;
 
 import "./token_exchange.sol" ; 
+import "./TeamRole.sol" ; 
 
-contract token_challenge is AdminRole {
+contract token_challenge is AdminRole, TeamRole {
 
     //address _exchangeAddress; 
     address _fss = 0x85A8d7241Ffffee7290501473A9B11BFdA2Ae9Ff ;
@@ -68,7 +69,10 @@ contract token_challenge is AdminRole {
         require(_alreadyRegistered == false, "You're already registered."); 
 
         _teamAddresses.push(teamAddress); 
-
+        if(!(isTeam(teamAddress))){
+            addTeam(teamAddress);
+        }
+         
         require(_teamAddresses.length <= 3, "Too many teams."); 
         
         emit Registered(teamAddress); 
@@ -125,14 +129,17 @@ contract token_challenge is AdminRole {
     function challengeStart(address directChallenged, uint256 flag) external {
         //token_exchange fss_exchange = token_exchange(_exchangeAddress); 
         //IT_PayCoin payCoin = IT_PayCoin(fss_exchange.payCoin());
-
+        /*
         for(uint256 i = 0; i < _directFlag.length; i++){
             require(_directFlag[i] != flag , "Flag already used!");
         }
+        */
+        checkFlag(_directFlag, flag); 
+
         require(msg.sender != directChallenged, "The addresses must be different."); 
         //TODO require address must be of the teams. 
 
-        _directFlag.push(flag); 
+        //_directFlag.push(flag); 
         _startDirectChallenge[flag] = now;
         _directChallenger = msg.sender; 
         _directChallenged = directChallenged; 
@@ -151,8 +158,9 @@ contract token_challenge is AdminRole {
         payCoin.burnFrom(msg.sender, 50e18);
         
         require(msg.sender == _directChallenger || msg.sender == _directChallenged, "You must be either the challenger or the challenged."); 
-        if(now >= _startDirectChallenge[flag] + 5 minutes){
+        if(now >= _startDirectChallenge[flag] + 5 seconds){ //REMEMBER TO CHANGE BACK TO MINUTES!
             require(_directChallengeWon[flag] == false, "The challenge has already been won."); 
+            /*
             for(uint256 i = 0; i < _directFlag.length; i++){
                 //require( _flag[i] == flag , "Couldn't find yuor flag!");
                 if (_directFlag[i] == flag ){
@@ -161,7 +169,9 @@ contract token_challenge is AdminRole {
                 }
             }
             require(_flagFound, "Couldn't find yuor flag!"); 
-            
+            */
+            matchFlag(_directFlag, flag); 
+
             payCoin.mint(msg.sender, 1000e18);
             emit DirectChallengeWon(msg.sender, flag, 1000e18); 
             _directChallengeWon[flag] = true;  
@@ -176,16 +186,19 @@ contract token_challenge is AdminRole {
     
     //TEAM CHALLENGE
     
-    function challengeStart(uint256 flag) external {
+    function challengeStart(uint256 flag) onlyTeam external {
         //token_exchange fss_exchange = token_exchange(_exchangeAddress); 
         //IT_PayCoin payCoin = IT_PayCoin(fss_exchange.payCoin());
-
+        /*
         for(uint256 i = 0; i < _teamFlag.length; i++){
             require(_teamFlag[i] != flag , "Flag already used!");
         } 
+        */
         //TODO require address must be of the teams.
 
-        _teamFlag.push(flag); 
+        //_teamFlag.push(flag); 
+        checkFlag(_teamFlag, flag); 
+
         _startTeamChallenge[flag] = now;
         _teamChallengeWon[flag] = false; 
 
@@ -205,16 +218,17 @@ contract token_challenge is AdminRole {
 
     }
 
-    function winTeamChallenge(uint256 flag) external returns(bool) {
+    function winTeamChallenge(uint256 flag) onlyTeam external returns(bool) {
         //token_exchange fss_exchange = token_exchange(_exchangeAddress); 
         //IT_PayCoin payCoin = IT_PayCoin(fss_exchange.payCoin());    
         bool _flagFound = false; 
 
         payCoin.burnFrom(msg.sender, 100e18);
 
-        require(msg.sender == _teamChallenger || msg.sender == _teamChallenged[0] || msg.sender == _teamChallenged[1], "You must be either the challenger or one fo the challenged."); 
-        if(now >= _startTeamChallenge[flag] + 5 minutes){
+        //require(msg.sender == _teamChallenger || msg.sender == _teamChallenged[0] || msg.sender == _teamChallenged[1], "You must be either the challenger or one fo the challenged."); 
+        if(now >= _startTeamChallenge[flag] + 5 seconds){//REMEMBER TO CHANGE BACK TO MINUTES!
             require(_teamChallengeWon[flag] == false, "The challenge has already been won."); 
+            /*
             for(uint256 i = 0; i < _teamFlag.length; i++){
                 //require( _flag[i] == flag , "Couldn't find yuor flag!");
                 if (_teamFlag[i] == flag ){
@@ -223,7 +237,9 @@ contract token_challenge is AdminRole {
                 }
             }
             require(_flagFound, "Couldn't find yuor flag!"); 
-            
+            */
+            matchFlag(_teamFlag, flag); 
+
             if(msg.sender == _teamChallenger){
                 payCoin.mint(msg.sender, 1500e18);
                 emit TeamChallengeWon(msg.sender, flag, 1500e18);
@@ -233,7 +249,7 @@ contract token_challenge is AdminRole {
                 emit TeamChallengeWon(msg.sender, flag, 1000e18);
             }
              
-            _directChallengeWon[flag] = true;  
+            _teamChallengeWon[flag] = true;  
 
             return true; 
         } 
@@ -241,6 +257,38 @@ contract token_challenge is AdminRole {
             return false; 
         }
     }
+
+
+    //INTERNAL FUNCTION
+
+    function checkFlag(uint256[] storage _flags, uint256 _flag) internal {
+
+        for(uint256 i = 0; i < _flags.length; i++){
+            require(_flags[i] != _flag , "Flag already used!");
+        }
+
+        _flags.push(_flag);
+
+    }
+
+    function matchFlag(uint256[] storage _flags, uint256 _flag) internal {
+        bool _flagFound = false;
+
+        for(uint256 i = 0; i < _flags.length; i++){
+                //require( _flag[i] == flag , "Couldn't find yuor flag!");
+                if (_flags[i] == _flag ){
+                    _flagFound = true; 
+                    break; 
+                }
+            }
+            require(_flagFound, "Couldn't find yuor flag!");
+
+    }
+
+
+
+
+
 
     //EXCHANGE & PAYCOIN ADDRESS
     /*

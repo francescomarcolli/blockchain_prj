@@ -182,6 +182,17 @@ contract token_exchange is BrokerRole, AdminRole {
         return last_id_price; 
     }
 
+    //TEAMTOKEN & PAYCOIN ADDRESS
+    /*
+    function setToken(address tokenAddress) onlyAdmin external {
+        token = token_erc20(tokenAddress); 
+    }
+    
+    function setPayCoin(address payCoinAddress) onlyAdmin external {
+        payCoin = IT_PayCoin(payCoinAddress); 
+    }
+    */
+
 
 
 }
