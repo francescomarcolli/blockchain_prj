@@ -14,12 +14,12 @@ contract token_exchange is BrokerRole, AdminRole {
     IT_ERC20 public token;
     IT_PayCoin public payCoin;
 
-    uint256 private tk_price;
+    //uint256 private tk_price;
     uint256 private _openingtime;
     uint256 private _closingtime;
     uint8 public _overnightCalls; 
 
-    uint256[] priceHistory;
+    uint256[] private priceHistory;
 
     //address _addressPC ;
     //= 0xc429620C4451d820B96FD3E5209FADa0F5a89852
@@ -47,8 +47,8 @@ contract token_exchange is BrokerRole, AdminRole {
         token = new token_erc20();
         payCoin = new PayCoin();
 
-        tk_price = 1e18 ; //accounts for PayCoin's decimals
-        priceHistory.push(tk_price);
+        //tk_price = 1e18 ; //accounts for PayCoin's decimals
+        //priceHistory.push(tk_price);
 
         _openingtime = now ;
         _closingtime = now + 1 hours ; //TODO Remember to modify it!
@@ -106,7 +106,7 @@ contract token_exchange is BrokerRole, AdminRole {
 
         token.mint(recipient, amount);
 
-        emit Buy(recipient, amount, tk_price);
+        emit Buy(recipient, amount, priceHistory[priceHistory.length.sub(1)]);
     }
 
     function _sell(address seller, uint256 amount) internal {
@@ -116,7 +116,7 @@ contract token_exchange is BrokerRole, AdminRole {
 
         payCoin.mint(seller,getFee(amount, false));
 
-        emit Sell(address(this), amount, tk_price);
+        emit Sell(address(this), amount, priceHistory[priceHistory.length.sub(1)]);
     }
 
     function getFee(uint256 amount, bool from_buy) public returns (uint256){
@@ -124,10 +124,10 @@ contract token_exchange is BrokerRole, AdminRole {
         uint256 exp = uint256(token.decimals());
 
         if (from_buy){
-            return amount.mul(tk_price).div(10**exp).add(amount.mul(2).div(1000));
+            return amount.mul(priceHistory[priceHistory.length.sub(1)]).div(10**exp).add(amount.mul(2).div(1000));
         }
         else{
-            return amount.mul(tk_price).div(10**exp).sub(amount.mul(2).div(1000));
+            return amount.mul(priceHistory[priceHistory.length.sub(1)]).div(10**exp).sub(amount.mul(2).div(1000));
         }
 
     }
