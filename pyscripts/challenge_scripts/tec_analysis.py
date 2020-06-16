@@ -32,5 +32,5 @@ for i in range(0, 8759):
     prices_list_T1.append(T1_exchange.getHistory(i))
     prices_list_T3.append(T3_exchange.getHistory(i))
 
-data = { 'TokenT1': prices_list_T1, 'TokenT2': prices_list_T3}
+data = {'TokenT1': prices_list_T1, 'TokenT3': prices_list_T3}
 df = pd.DataFrame(data)
