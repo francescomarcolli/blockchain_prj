@@ -1,14 +1,5 @@
 import pandas as pd
-import numpy as np
-#import matplotlib.pyplot as plt
-#import matplotlib.dates as mdates
-#%matplotlib inline
-#import seaborn as sns
-#import ta
-#from ta.utils import dropna
-#from pandas_datareader import data as web
 
-#from datetime import date, datetime, timedelta
 import datetime
 
 from brownie import web3, network, Wei, Contract, project
@@ -45,14 +36,14 @@ df_T3 = pd.DataFrame(prices_list_T3, columns=['TokenT3'])
 # Generate dates to append as index to df_T1,3
 def datetime_range(start, end, delta):
     current = start
-    if not isinstance(delta, timedelta):
-        delta = timedelta(**delta)
+    if not isinstance(delta, datetime.timedelta):
+        delta = datetime.timedelta(**delta)
     while current < end:
         yield current
         current += delta
 
-start = datetime(2019,6,23)
-end = datetime(2020,6,23)
+start = datetime.datetime(2019,6,23)
+end = datetime.datetime(2020,6,23)
 
 dates = []
 dates_refined = []
@@ -69,54 +60,3 @@ df_T3.index = dates_refined
 
 df_final = df_T1.join(df_T3)
 df_final.to_csv('./token_prices.csv', sep='\t')
-
-
-##########################################
-# close = pd.read_csv(r'price_history.csv', index_col=0, names=['', 'close'], skiprows=8759) #leggere il dataframe data (df)
-# close.index = pd.to_datetime(close.index)
-
-
-
-#returns = close.pct_change(1)
-#log_returns = np.log(close).diff()
-#log_returns.head()
-
-
-#ema_short = close.ewm(span=20, adjust=False).mean()
-#ema_long = close.ewm(span=100, adjust=False).mean()
-#trading_positions_raw = close - ema_short
-#trading_positions = trading_positions_raw.apply(np.sign)
-#trading_positions_final = trading_positions.shift(1)
-
-#asset_log_returns = np.log(close).diff()
-#strategy_asset_log_returns = trading_positions_final * asset_log_returns
-
-# Get the cumulative log-returns per asset
-#cum_strategy_asset_log_returns = strategy_asset_log_returns.cumsum()
-
-# Transform the cumulative log returns to relative returns
-#cum_strategy_asset_relative_returns = np.exp(cum_strategy_asset_log_returns) - 1
-
-
-# Total strategy relative returns. This is the exact calculation.
-#cum_relative_return_exact = cum_strategy_asset_relative_returns.sum(axis=1)
-#cum_relative_return_exact.shape[0]
-
-#gestire portfolio
-
-asset_log_returns = np.log(close).diff()
-
-strategy_asset_log_returns = trading_positions_final * asset_log_returns
-
-# Let us plot the cumulative log-returns and the cumulative total relative returns of our strategy for each of the assets.
-
-# Get the cumulative log-returns per asset
-cum_strategy_asset_log_returns = strategy_asset_log_returns.cumsum()
-
-# Transform the cumulative log returns to relative returns
-cum_strategy_asset_relative_returns = np.exp(cum_strategy_asset_log_returns) - 1
-
-# Total strategy relative returns. This is the exact calculation.
-cum_relative_return_exact = cum_strategy_asset_relative_returns.sum(axis=1)
-cum_relative_return_exact.shape[0]
-
