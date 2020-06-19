@@ -109,5 +109,6 @@ while True:
         # aggiorna l'ora d'inizio alle 9 del giorno dopo
         start += datetime.timedelta(hours=24)
         time.sleep(54000‬)
+        
     if(datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)): 
         break

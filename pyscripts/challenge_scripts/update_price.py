@@ -19,19 +19,15 @@ df = pd.read_csv(r'./price_history.csv',  index_col=0, names= ['','delta'], skip
 
 df = df.diff()
 i = 1
+
 while True:
 
     if (datetime.datetime.now() >= start && datetime.datetime.now() < start + datetime.timedelta(hours=9)):
-
         tk_exchange.setNewPrice(df.iloc[i]['delta'])
-
         time.sleep(random.randrange(300, 600))
-
         i += 1
-
     else:
         time.sleep(54000‬)
-
 
     if (datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)):
         break
