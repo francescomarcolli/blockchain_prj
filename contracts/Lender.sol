@@ -19,8 +19,8 @@ contract Lender is AdminRole {
     //uint256 private _exp = 10**(uint256(payCoin.decimals()));
      
 
-    event OpenLoan(address indexed who, uint256 indexed amount); 
-    event CloseLoan(address indexed who); 
+    event OpenLoan(address indexed who, uint256 indexed amount, uint256 indexed id_loan); 
+    event CloseLoan(address indexed who, uint256 indexed id_loan); 
 
     constructor (address payCoinAddress) public {
         payCoin = IT_PayCoin(payCoinAddress); 
@@ -38,7 +38,7 @@ contract Lender is AdminRole {
         _id = _id_loan.push(amount).sub(1); 
         _blockNumber[_id] = block.number; 
 
-        emit OpenLoan(msg.sender, amount);  
+        emit OpenLoan(msg.sender, amount, _id);  
 
         return _id; 
     }
@@ -49,7 +49,7 @@ contract Lender is AdminRole {
         payCoin.burnFrom(msg.sender, amount.add(getFee(amount, id_loan))); 
         _debt[msg.sender] = _debt[msg.sender].sub(amount); 
 
-        emit CloseLoan(msg.sender); 
+        emit CloseLoan(msg.sender, id_loan); 
     }
 
     function loanStatus(uint256 id_loan) external view returns(uint256, uint256){
