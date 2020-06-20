@@ -22,5 +22,7 @@ pc = local_account.deploy(token_prj.PayCoin)
 lender = local_account.deploy(token_prj.Lender, pc.address)
 pc.addMinter(lender.address)
 pc.addBurner(lender.address)
+pc.mint("0xe5e619C1cE24A3c5083D6c30FAD80Dbe4D8FFd39", 50000e18)
+pc.mint("0xe6a2234764Bd7a41Da73bd91F9E857819d20b22F", 50000e18)
 #local_account.deploy(token_prj.token_exchange)
 
