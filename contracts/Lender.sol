@@ -11,7 +11,6 @@ contract Lender is AdminRole {
 
     mapping (address=>uint256) _loan;
     mapping (address=>uint256) _debt;
-    // add mapping to keep trace of block.number when loan is open
     mapping (uint256=>uint256) _blockNumber; 
     mapping (uint256=>bool) _closed; 
 

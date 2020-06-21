@@ -23,17 +23,12 @@ contract token_exchange is BrokerRole, AdminRole {
 
     //address _addressPC ;
     //= 0xc429620C4451d820B96FD3E5209FADa0F5a89852
-    /*
-    address _frama = 0x96E7Cf89FF09659854277531FA315AFc27102E37 ;
-    address _libra = 0x2FbfB1e766E6F6244669E4794ff022a653F34eFf ;
-    address _pirot = 0x743491ab1511287491af8De4Ca25b2fbc707eB88 ;
-    */
 
     address _fss = 0x85A8d7241Ffffee7290501473A9B11BFdA2Ae9Ff ; 
 
     event Buy(address indexed buyer, uint256 indexed amount, uint256 indexed price);
     event Sell(address indexed buyer, uint256 indexed amount, uint256 indexed price);
-    event PriceChange(address indexed changer, uint256 indexed id_price, uint256 indexed price); 
+    event PriceChange(address indexed who, uint256 indexed id_price, uint256 indexed price); 
     event ChangeStart(address indexed who, uint256 indexed when); 
     event ChangeEnd(address indexed who, uint256 indexed when); 
 
@@ -51,27 +46,14 @@ contract token_exchange is BrokerRole, AdminRole {
         //priceHistory.push(tk_price);
 
         _openingtime = now ;
-        _closingtime = now + 1 hours ; //TODO Remember to modify it!
+        _closingtime = now + 12 hours ; //TODO Remember to modify it!
         _overnightCalls = 0; 
 
         if (!(isAdmin(_fss) && isBroker(_fss))){
             addAdmin(_fss);
             addBroker(_fss);
         }
-        /*
-        if (!(isAdmin(_frama) && isBroker(_frama))){
-            addAdmin(_frama);
-            addBroker(_frama);
-        }
-        if (!(isAdmin(_libra) && isBroker(_libra))){
-            addAdmin(_libra);
-            addBroker(_libra);
-        }
-        if (!(isAdmin(_pirot) && isBroker(_pirot))){
-            addAdmin(_pirot);
-            addBroker(_pirot);
-        }
-        */
+    
         emit ChangeStart(_msgSender(), _openingtime); 
         emit ChangeEnd(_msgSender(), _closingtime + 7 days); 
     }
@@ -119,7 +101,7 @@ contract token_exchange is BrokerRole, AdminRole {
         emit Sell(address(this), amount, priceHistory[priceHistory.length.sub(1)]);
     }
 
-    function getFee(uint256 amount, bool from_buy) public returns (uint256){
+    function getFee(uint256 amount, bool from_buy) internal returns(uint256){
         // amount * tk_price / 10^18 +- 2*amount/1000
         uint256 exp = uint256(token.decimals());
 

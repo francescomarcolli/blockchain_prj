@@ -10,26 +10,26 @@ def readLog(tx_hash, logs):
     for log in logs:
         for log_entry in log:
             if(log_entry['event'] == 'DirectChallenge'): 
-                flag = log_entry['args']['flag']
+                flag = log_entry['args']['_flag']
                 time.sleep(300)
                 brownieContract.winDirectChallenge(flag)
             
             if(log_entry['event'] == 'DirectChallengeWon'): 
                 winner = log_entry['args']['winner']
-                amount = log_entry['args']['amount']
+                amount = log_entry['args']['_amount']
                 if( winner == local_account.address): 
                     print("We won the challenge! \nAnd we won: {}".format(amount))
                 else: 
                     print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
             
             if(log_entry['event'] == 'TeamChallenge'): 
-                flag = log_entry['args']['flag']
+                flag = log_entry['args']['_flag']
                 time.sleep(300)
                 brownieContract.winTeamChallenge(flag)
             
             if(log_entry['event'] == 'TeamChallengeWon'): 
                 winner = log_entry['args']['winner']
-                amount = log_entry['args']['amount']
+                amount = log_entry['args']['_amount']
                 if( winner == local_account.address): 
                     print("We won the challenge! \nAnd we won: {}".format(amount))
                 else: 

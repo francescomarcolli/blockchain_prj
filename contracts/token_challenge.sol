@@ -33,8 +33,8 @@ contract token_challenge is AdminRole, TeamRole {
     mapping (uint256 => bool) _directChallengeWon;
     mapping (uint256 => uint256) _startDirectChallenge; 
 
-    event DirectChallenge(address indexed directChallenger, address indexed directChallenged, uint256 directFlag); 
-    event DirectChallengeWon(address indexed directWinner, uint256 indexed directFlag, uint256 indexed coin_amount); 
+    event DirectChallenge(address indexed challenger, address indexed challenged, uint256 _flag); 
+    event DirectChallengeWon(address indexed winner, uint256 indexed _flag, uint256 indexed _amount); 
 
     //TEAM CHALLENGE VARIABLES
     uint256[] _teamFlag; 
@@ -44,13 +44,14 @@ contract token_challenge is AdminRole, TeamRole {
     mapping (uint256 => uint256) _startTeamChallenge; 
     mapping (uint256 => bool) _teamChallengeWon; 
     
-    event TeamChallenge(address indexed teamChallenger, uint256 teamFlag);
-    event TeamChallengeWon(address indexed teamWinner, uint256 indexed teamFlag, uint256 indexed coin_amount);  
+    event TeamChallenge(address indexed challenger, uint256 _flag);
+    event TeamChallengeWon(address indexed winner, uint256 indexed _flag, uint256 indexed _amount);  
 
     //CONSTRUCTOR
     constructor (address exchangeAddress) public {
         fss_exchange = token_exchange(exchangeAddress);
         payCoin = IT_PayCoin(fss_exchange.payCoin());
+        // add register(msg.sender)
     }
 
     //SIGNING UP & CHECKING FUNCTIONS
@@ -108,7 +109,7 @@ contract token_challenge is AdminRole, TeamRole {
         //IT_PayCoin payCoin = IT_PayCoin(fss_exchange.payCoin());
 
         require(id_price == _last_id_price, "Wrong id price."); 
-        if( now > _startOvernightChallenge && now < _startOvernightChallenge + 1 minutes){
+        if( now > _startOvernightChallenge && now < _startOvernightChallenge + 1 hours){
             require(_overnightWon == false, "The challenge has already been won."); 
 
             payCoin.mint(msg.sender, 1200e18); 
@@ -126,7 +127,7 @@ contract token_challenge is AdminRole, TeamRole {
 
     //DIRECT CHALLENGE
     
-    function challengeStart(address directChallenged, uint256 flag) external {
+    function challengeStart(address directChallenged, uint256 flag) onlyTeam external {
         //token_exchange fss_exchange = token_exchange(_exchangeAddress); 
         //IT_PayCoin payCoin = IT_PayCoin(fss_exchange.payCoin());
         /*
@@ -150,7 +151,7 @@ contract token_challenge is AdminRole, TeamRole {
     
     }
 
-    function winDirectChallenge(uint256 flag) external returns(bool) {
+    function winDirectChallenge(uint256 flag) onlyTeam external returns(bool) {
         //token_exchange fss_exchange = token_exchange(_exchangeAddress); 
         //IT_PayCoin payCoin = IT_PayCoin(fss_exchange.payCoin());
         bool _flagFound = false; 
@@ -158,7 +159,7 @@ contract token_challenge is AdminRole, TeamRole {
         payCoin.burnFrom(msg.sender, 50e18);
         
         require(msg.sender == _directChallenger || msg.sender == _directChallenged, "You must be either the challenger or the challenged."); 
-        if(now >= _startDirectChallenge[flag] + 5 seconds){ //REMEMBER TO CHANGE BACK TO MINUTES!
+        if(now >= _startDirectChallenge[flag] + 5 minutes){ //REMEMBER TO CHANGE BACK TO MINUTES!
             require(_directChallengeWon[flag] == false, "The challenge has already been won."); 
             /*
             for(uint256 i = 0; i < _directFlag.length; i++){
@@ -194,7 +195,6 @@ contract token_challenge is AdminRole, TeamRole {
             require(_teamFlag[i] != flag , "Flag already used!");
         } 
         */
-        //TODO require address must be of the teams.
 
         //_teamFlag.push(flag); 
         checkFlag(_teamFlag, flag); 
@@ -226,7 +226,7 @@ contract token_challenge is AdminRole, TeamRole {
         payCoin.burnFrom(msg.sender, 100e18);
 
         //require(msg.sender == _teamChallenger || msg.sender == _teamChallenged[0] || msg.sender == _teamChallenged[1], "You must be either the challenger or one fo the challenged."); 
-        if(now >= _startTeamChallenge[flag] + 5 seconds){//REMEMBER TO CHANGE BACK TO MINUTES!
+        if(now >= _startTeamChallenge[flag] + 5 minutes){//REMEMBER TO CHANGE BACK TO MINUTES!
             require(_teamChallengeWon[flag] == false, "The challenge has already been won."); 
             /*
             for(uint256 i = 0; i < _teamFlag.length; i++){

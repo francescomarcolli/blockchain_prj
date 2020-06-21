@@ -1,6 +1,12 @@
 [
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "exchangeAddress",
+          "type": "address"
+        }
+      ],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "constructor"
@@ -37,11 +43,80 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "account",
+          "name": "challenger",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "challenged",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "_flag",
+          "type": "uint256"
+        }
+      ],
+      "name": "DirectChallenge",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "_flag",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "DirectChallengeWon",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "coin_won",
+          "type": "uint256"
+        }
+      ],
+      "name": "Overnight",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "teamAddress",
           "type": "address"
         }
       ],
-      "name": "BrokerAdded",
+      "name": "Registered",
       "type": "event"
     },
     {
@@ -54,7 +129,7 @@
           "type": "address"
         }
       ],
-      "name": "BrokerRemoved",
+      "name": "TeamAdded",
       "type": "event"
     },
     {
@@ -63,23 +138,17 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "buyer",
+          "name": "challenger",
           "type": "address"
         },
         {
-          "indexed": true,
+          "indexed": false,
           "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "price",
+          "name": "_flag",
           "type": "uint256"
         }
       ],
-      "name": "Buy",
+      "name": "TeamChallenge",
       "type": "event"
     },
     {
@@ -88,23 +157,36 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "buyer",
+          "name": "winner",
           "type": "address"
         },
         {
           "indexed": true,
           "internalType": "uint256",
-          "name": "amount",
+          "name": "_flag",
           "type": "uint256"
         },
         {
           "indexed": true,
           "internalType": "uint256",
-          "name": "price",
+          "name": "_amount",
           "type": "uint256"
         }
       ],
-      "name": "Sell",
+      "name": "TeamChallengeWon",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "TeamRemoved",
       "type": "event"
     },
     {
@@ -131,7 +213,27 @@
           "type": "address"
         }
       ],
-      "name": "addBroker",
+      "name": "addTeam",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "directChallenged",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "flag",
+          "type": "uint256"
+        }
+      ],
+      "name": "challengeStart",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -142,18 +244,12 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "tokenAmount",
+          "name": "flag",
           "type": "uint256"
         }
       ],
-      "name": "buy",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "name": "challengeStart",
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -184,11 +280,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "account",
+          "name": "teamAddress",
           "type": "address"
         }
       ],
-      "name": "isBroker",
+      "name": "isRegistered",
       "outputs": [
         {
           "internalType": "bool",
@@ -202,8 +298,14 @@
     },
     {
       "constant": true,
-      "inputs": [],
-      "name": "isOpen",
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "isTeam",
       "outputs": [
         {
           "internalType": "bool",
@@ -213,6 +315,51 @@
       ],
       "payable": false,
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id_price",
+          "type": "uint256"
+        }
+      ],
+      "name": "overnightCheck",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "int256",
+          "name": "new_delta_price",
+          "type": "int256"
+        }
+      ],
+      "name": "overnightStart",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "teamAddress",
+          "type": "address"
+        }
+      ],
+      "name": "register",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -227,7 +374,7 @@
     {
       "constant": false,
       "inputs": [],
-      "name": "renounceBroker",
+      "name": "renounceTeam",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -238,11 +385,11 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "tokenAmount",
+          "name": "flag",
           "type": "uint256"
         }
       ],
-      "name": "sell",
+      "name": "winDirectChallenge",
       "outputs": [
         {
           "internalType": "bool",
@@ -256,26 +403,23 @@
     },
     {
       "constant": false,
-      "inputs": [],
-      "name": "setOpenTime",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "token",
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "flag",
+          "type": "uint256"
+        }
+      ],
+      "name": "winTeamChallenge",
       "outputs": [
         {
-          "internalType": "contract IT_ERC20",
+          "internalType": "bool",
           "name": "",
-          "type": "address"
+          "type": "bool"
         }
       ],
       "payable": false,
-      "stateMutability": "view",
+      "stateMutability": "nonpayable",
       "type": "function"
     }
   ]
