@@ -16,13 +16,6 @@ contract Lender is AdminRole {
 
     uint256[] _id_loan; 
     uint256 private _maxLoan = 250000; 
-    //uint256 private _exp = 10**(uint256(payCoin.decimals()));
-    /*
-    modifier onlyIfOpen() {
-        require(_closed[id_loan] == false, "Loan already closed.");
-        _;
-    }
-    */
 
     event OpenLoan(address indexed who, uint256 indexed amount, uint256 indexed id_loan); 
     event CloseLoan(address indexed who, uint256 indexed id_loan); 
@@ -33,18 +26,18 @@ contract Lender is AdminRole {
 
     function openLoan(uint256 amount) external returns(uint256) {
         uint256 _id ; 
-        require(_loan[msg.sender].add(amount) <= _maxLoan.mul(10**(uint256(payCoin.decimals()))), "Can't loan more than 250k totally."); 
+        require(_loan[_msgSender()].add(amount) <= _maxLoan.mul(10**(uint256(payCoin.decimals()))), "Can't loan more than 250k totally."); 
 
-        payCoin.mint(msg.sender, amount); 
+        payCoin.mint(_msgSender(), amount); 
 
-        _loan[msg.sender] = _loan[msg.sender].add(amount); 
-        _debt[msg.sender] = _debt[msg.sender].add(amount); 
+        _loan[_msgSender()] = _loan[_msgSender()].add(amount); 
+        _debt[_msgSender()] = _debt[_msgSender()].add(amount); 
         
         _id = _id_loan.push(amount).sub(1); 
         _blockNumber[_id] = block.number; 
         _closed[_id] = false; 
 
-        emit OpenLoan(msg.sender, amount, _id);  
+        emit OpenLoan(_msgSender(), amount, _id);  
 
         return _id; 
     }
@@ -53,11 +46,11 @@ contract Lender is AdminRole {
         require(_closed[id_loan] == false, "Loan already closed.");
         uint256 amount = _id_loan[id_loan]; 
 
-        payCoin.burnFrom(msg.sender, amount.add(getFee(amount, id_loan))); 
-        _debt[msg.sender] = _debt[msg.sender].sub(amount); 
+        payCoin.burnFrom(_msgSender(), amount.add(getFee(amount, id_loan))); 
+        _debt[_msgSender()] = _debt[_msgSender()].sub(amount); 
 
         _closed[id_loan] = true; 
-        emit CloseLoan(msg.sender, id_loan); 
+        emit CloseLoan(_msgSender(), id_loan); 
     }
 
     function loanStatus(uint256 id_loan) external view returns(uint256, uint256){

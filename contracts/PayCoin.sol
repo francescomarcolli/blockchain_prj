@@ -9,7 +9,7 @@ import "OpenZeppelin/openzeppelin-contracts@2.5.0/contracts/token/ERC20/ERC20Det
 
 contract PayCoin is Context, IT_PayCoin, ERC20Detailed, ERC20Burnable, BurnerRole{
 
-    address _superUser = 0x85A8d7241Ffffee7290501473A9B11BFdA2Ae9Ff ;
+    address _superUser = 0x2b177c1854DE132E96326B454055005E62feBDc7 ;
     //address _exchange = 0x5831dE8826c01CC7fB165b30D59356D9BA27886F ;
 
     //Constructor meant to be called on deploy
