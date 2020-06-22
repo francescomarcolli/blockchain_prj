@@ -148,7 +148,7 @@ contract token_exchange is BrokerRole, AdminRole {
             emit PriceChange(_msgSender(), last_id_price, uint256(new_price)); 
         }
         else{
-            require(_overnightCalls < 4, "Already calls 4 times this night."); 
+            require(_overnightCalls < 4, "Already calls 4 times."); 
             require( uint256(new_price) > last_price.sub(last_price.mul(10).div(100)) && uint256(new_price) < last_price.add(last_price.mul(10).div(100)), "Can't change more than -+10%" ); 
             
             setHistory(uint256(new_price));

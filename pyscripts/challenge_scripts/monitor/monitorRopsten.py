@@ -1,10 +1,6 @@
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
-#from web3 import Web3
 import json, time, sys, datetime
-#from web3.contract import ContractEvents
-#from web3.contract import ContractEvent
-#from web3 import Web3
 
 def readLog(tx_hash, logs):
     for log in logs:
@@ -57,10 +53,6 @@ def readLog(tx_hash, logs):
                     print("We are registered")
                 #else: 
                     #print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
-
-            
-
-
 
 
 def monitorContract(web3Contract, blockNumber):  
@@ -128,10 +120,5 @@ while True:
     time.sleep(poll_interval)
     print('Listening to transactions...')
     #print('BlockNumber: {}'.format(startBlock) )
-    
-
-#[address, abi_file] = ['0xa4f9c9080e2Ed5e361b764A67023CC98d706cF38',
-#'/home/simone/Dropbox/Universita/MCF/blockchain_course/blockchain_course_unimi/challenge/teamCST/abi/Lender.json']
-#CST_Lender= Contract.from_abi('filterContract',abi=abi_data, address=address, owner=local_account)
-#CST_LenderW3 = web3.eth.contract(abi=abi_data, address=address)  
+     
 
