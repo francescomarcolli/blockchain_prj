@@ -24,8 +24,8 @@ with open('./pyscripts/abi/token_exchange.json') as json_file:
 exchange = Contract.from_abi('Exchange', address="0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110", abi= exchange_abi)
 
 print("Charging the prices on the exchange...")
-prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', nrows=8759)
-for j in range(0, 8760, 10): 
+prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', skiprows=3759, nrows=8759, names=['', 'close'])
+for j in range(3760, 8760, 10): 
     price1 = prices.iloc[j]['close']
     price2 = prices.iloc[j + 1]['close']
     price3 = prices.iloc[j + 2]['close']
