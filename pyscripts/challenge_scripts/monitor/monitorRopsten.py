@@ -18,62 +18,80 @@ def readLog(tx_hash, logs):
             if(log_entry['event'] == 'DirectChallenge'): 
                 if(log_entry['args']['challenger'] == local_account_trading.address or log_entry['args']['challenged'] == local_account_trading.address):
                     flag = log_entry['args']['_flag']
-                    #telegram_bot_sendtext("")
+                    telegram_bot_sendtext("Contract Address: {} \nEvent: {} \nChallenger: {} \nChallenged: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger'],log_entry['args']['challenged']))
                     time.sleep(300)
                     try: 
+                        telegram_bot_sendtext("Sending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
                         payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})
                         brownieContract.winDirectChallenge(flag, {'from': local_account_trading})
+                    except: 
+                        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                        continue
             
             if(log_entry['event'] == 'DirectChallengeWon'): 
                 winner = log_entry['args']['winner']
                 amount = log_entry['args']['_amount']
                 if( winner == local_account_trading.address): 
-                    print("We won the challenge! \nAnd we won: {}".format(amount))
+                    telegram_bot_sendtext("Contract Address: {} \nEvent: {} \nWe won! \nAmount won: {} \nYuppie!".format(brownieContract.address, log_entry['event'], amount))
                 else: 
-                    print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
+                    telegram_bot_sendtext("Contract Address: {} \nEvent: {} \nThe direct challenge was won by: {} \nAmount won: {} \nUffi!".format(brownieContract.address, log_entry['event'], winner, amount))
             
             if(log_entry['event'] == 'TeamChallenge'): 
                 flag = log_entry['args']['_flag']
+                telegram_bot_sendtext("Contract Address: {} \nEvent: {} \nChallenger: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger']))
                 time.sleep(300)
                 try: 
+                    telegram_bot_sendtext("Sending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
                     payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
                     brownieContract.winTeamChallenge(flag, {'from': local_account_trading})
+                except: 
+                    telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                    continue
             
             if(log_entry['event'] == 'TeamChallengeWon'): 
                 winner = log_entry['args']['winner']
                 amount = log_entry['args']['_amount']
                 if( winner == local_account_trading.address): 
-                    print("We won the challenge! \nAnd we won: {}".format(amount))
+                    telegram_bot_sendtext("Contract Address: {} \nEvent: {} \nWe won! \nAmount won: {} \nYuppie!".format(brownieContract.address, log_entry['event'], amount))
                 else: 
-                    print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
+                    telegram_bot_sendtext("Contract Address: {} \nEvent: {} \nThe direct challenge was won by: {} \nAmount won: {} \nUffi!".format(brownieContract.address, log_entry['event'], winner, amount))
 
             if(log_entry['event'] == 'PriceChange'): 
                 if( not(brownieContract.isOpen()) ):
+                    telegram_bot_sendtext("Whaaaaleee! \nContract Address: {}".format(brownieContract.address))
                     if(brownieContract.address == teamAddresses['teamCST']['exchangeAddress']):
                         with open(teamAddresses['teamCST']['challengeAbi']) as json_file: 
                             challengeCSTabi = json.load(json_file)
                         challengeCST = Contract.from_abi('ChallengeCST', address= teamAddresses['teamCST']['challengeAddress'], abi= challengeCSTabi)
                         try:
+                            telegram_bot_sendtext("Trying to catch the whale on contract: {}".format(brownieContract.address))
                             challengeCST.overnightCheck(log_entry['args']['id_price'], {'from': local_account_trading})
+                        except:
+                            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                            continue
                     if(brownieContract.address == teamAddresses['teamAA']['exchangeAddress']):
                         with open(teamAddresses['teamAA']['challengeAbi']) as json_file: 
                             challengeAAabi = json.load(json_file)
                         challengeAA = Contract.from_abi('ChallengeAA', address= teamAddresses['teamAA']['challengeAddress'], abi= challengeAAabi)
                         try:
+                            telegram_bot_sendtext("Trying to catch the whale on contract: {}".format(brownieContract.address))
                             challengeAA.overnightCheck(log_entry['args']['id_price'], {'from': local_account_trading})
+                        except:
+                            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                            continue
 
             if(log_entry['event'] == 'Overnight'): 
                 winner = log_entry['args']['winner']
                 amount = log_entry['args']['coin_won']
                 if( winner == local_account_trading.address): 
-                    print("We won the challenge! \nAnd we won: {}".format(amount))
+                    telegram_bot_sendtext("We won the challenge! \nAnd we won: {}".format(amount))
                 else: 
-                    print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
+                    telegram_bot_sendtext("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
 
             if(log_entry['event'] == 'Registered'): 
                 teamRegistered = log_entry['event']['teamAddress']
                 if( teamRegistered == local_account_trading.address): 
-                    print("We are registered")
+                    telegram_bot_sendtext("We are signed in on the contract {}".format(brownieContract.address))
                 #else: 
                     #print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
 
@@ -109,7 +127,8 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 teamAddresses = {
                  'teamCST': {'exchangeAddress': '0xf6595CF80173Edf534469B15170370AbFF3FDdAb', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json', 'challengeAddress': ' 0x0b6019c547Ba293eBD74991217354b1281209985', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamCST/abi/Challenge.json'}, 
-                 'teamAA' : {'exchangeAddress': '0x5b349092f8F7A4f033743e064c61FDAea6629Db2', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json', 'challengeAddress': '0x40DbeAc4192FCF3901c9B42aDEeDD28B15F8961F', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamAA/abi/real/challenge.json'}
+                 'teamAA' : {'exchangeAddress': '0x5b349092f8F7A4f033743e064c61FDAea6629Db2', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json', 'challengeAddress': '0x40DbeAc4192FCF3901c9B42aDEeDD28B15F8961F', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamAA/abi/real/challenge.json'},
+                 'teamFSS' : {'exchangeAddress': '0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamFSS/Contract_Abis/token_exchange.json', 'challengeAddress': '0xB2A3c4136A79c6BA18A2D23E1bC9F6920956a7E4', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamFSS/Contracts_Abis/token_challenge.json'}
                 }
 
 # checking if the script is called in the right way

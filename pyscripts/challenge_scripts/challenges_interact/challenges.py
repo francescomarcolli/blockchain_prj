@@ -36,15 +36,15 @@ pc = Contract.from_abi('payCoin', address="0xa501cA3B72d8D90235BD8ADb2c67aCc062F
 
 with open('../blockchain_course_unimi/challenge/teamCST/abi/Challenge.json') as json_file: 
     challenge_CST_abi = json.load(json_file)
-challege_CST = Contract.from_abi('ChallengeCST', address="0x0b6019c547Ba293eBD74991217354b1281209985", abi= challenge_CST_abi)
+challenge_CST = Contract.from_abi('ChallengeCST', address="0x0b6019c547Ba293eBD74991217354b1281209985", abi= challenge_CST_abi)
 
 with open('../blockchain_course_unimi/challenge/teamAA/abi/real/challenge.json') as json_file: 
     challenge_AA_abi = json.load(json_file)
-challege_AA = Contract.from_abi('ChallengeAA', address="0x40DbeAc4192FCF3901c9B42aDEeDD28B15F8961F", abi= challenge_AA_abi)
+challenge_AA = Contract.from_abi('ChallengeAA', address="0x40DbeAc4192FCF3901c9B42aDEeDD28B15F8961F", abi= challenge_AA_abi)
 
 with open('./pyscripts/abi/token_challenge.json') as json_file: 
     challenge_FSS_abi = json.load(json_file)
-challege_FSS = Contract.from_abi('ChallengeFSS', address="0x8d3110d701835D5b54808265141F0D599480a2B9", abi= challenge_FSS_abi)
+challenge_FSS = Contract.from_abi('ChallengeFSS', address="0x8d3110d701835D5b54808265141F0D599480a2B9", abi= challenge_FSS_abi)
 
 with open('./pyscripts/abi/token_exchange.json') as json_file: 
     exchange_FSS_abi = json.load(json_file)
@@ -52,7 +52,7 @@ exchange_FSS = Contract.from_abi('ExchangeFSS', address="0xc9aaE2ADa5a5b650b4846
 
 _overnightCalls = 0
 
-challengeContracts = [challege_FSS, challege_AA, challege_CST]
+challengeContracts = [challenge_FSS, challenge_AA, challenge_CST]
 opponentsAddresses = []
 
 while True: 
@@ -62,6 +62,7 @@ while True:
     
     for contract in challengeContracts: 
         if(contract.isRegistered() == False): 
+            telegram_bot_sendtext("Registering our account on contract {}".format(contract.address))
             contract.Register(local_account_trading.address)
 
     # Launching PriceOvernight (I'm a WHAAALE)
@@ -70,7 +71,11 @@ while True:
     if(not(exchange_FSS.isOpen()) and _overnightCalls <= 4 and _lastCall < _lastCall + datetime.timedelta(hours= 48)):
         delta_price = random.randint(lastPrice - (lastPrice/10), lastPrice + (lastPrice/10)) 
         try:
-            challege_FSS.overnightStart(delta_price, {'from': local_account_trading})
+            telegram_bot_sendtext("Whaling cause it's fun!")
+            challenge_FSS.overnightStart(delta_price, {'from': local_account_trading})
+        except: 
+            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
+            continue
         _overnightCalls = _overnightCalls + 1
         _lastCall = datetime.datetime.now()
     
@@ -79,15 +84,26 @@ while True:
     challengedAddress = random.choice(opponentsAddresses)
     directFlag = random.randrange(1e18) 
     try:
-        pc.increaseAllowance(challege_FSS.address, 50e18, {'from': local_account_trading}) 
-        challege_FSS.challengeStart(challengedAddress, directFlag)
-
+        telegram_bot_sendtext("Challing {}".format(challengedAddress))
+        pc.increaseAllowance(challenge_FSS.address, 50e18, {'from': local_account_trading}) 
+        challenge_FSS.challengeStart(challengedAddress, directFlag)
+    except: 
+        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
+        continue
+    
+    time.sleep(random.randint(21600, 28800))
     # Launching TeamChallenge
 
     teamFlag = random.randrange(1e18)
     try: 
-        pc.increaseAllowance(challege_FSS.address, 100e18, {'from': local_account_trading})
-        challege_FSS.challengeStart(teamFlag)
+        telegram_bot_sendtext("Challing everyooone!")
+        pc.increaseAllowance(challenge_FSS.address, 100e18, {'from': local_account_trading})
+        challenge_FSS.challengeStart(teamFlag)
+    except:
+        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
+        continue
+    
+    time.sleep(random.randint(21600, 28800))
 
 
 

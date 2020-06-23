@@ -16,7 +16,10 @@ def telegram_bot_sendtext(bot_message):
 
 # Connecting to the network
 network_selected = "ropsten"
-network.connect(network_selected)
+try: 
+    network.connect(network_selected)
+except: 
+    network.connect(network_selected, launch_rpc=False)
 
 # Loading the metamask accounts
 ## Trading account
@@ -30,6 +33,7 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 ## Init team1 (CST) and team3 (AA) tokens, exchanges and the PayCoin
 
+print("Opening the contract...")
 with open('../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json') as json_file: 
     exchange_CST_abi = json.load(json_file)
 exchange_CST = Contract.from_abi('ExchangeCST', address='0xf6595CF80173Edf534469B15170370AbFF3FDdAb', abi=exchange_CST_abi)
@@ -37,17 +41,38 @@ exchange_CST = Contract.from_abi('ExchangeCST', address='0xf6595CF80173Edf534469
 with open('../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json') as json_file: 
     exchange_AA_abi = json.load(json_file)
 exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e064c61FDAea6629Db2', abi=exchange_AA_abi)
+print("Finished opening.")
 
 prices_list_CST = []
 prices_list_AA = []
 
 #while(exchange_AA.lastPrice()[0] == 8759 and exchange_CST.lastPrice()[0] == 8759): 
-telegram_bot_sendtext("Start reading the prices from the exchanges...")
-for i in range(0, 8760): 
-    prices_list_CST.append(exchange_CST.getHistory(i, {'from': local_account_trading}))
-    prices_list_AA.append(exchange_AA.getHistory(i, {'from': local_account_trading}))
+telegram_bot_sendtext("Start reading the prices from exchange_CST...")
+print("Start reading the prices from exchange_CST...")
+
+for i in range(2, exchange_CST.lastPrice()[0]+1): 
+    try:
+        prices_list_CST.append(exchange_CST.getHistory(i))
+    except: 
+        print(Exception)
+        continue
+
+telegram_bot_sendtext("Finished now!")   
+print("Finished now!") 
+
+print("Start reading the prices from exchange_AA...")
+telegram_bot_sendtext("Start reading the prices from exchange_AA...")   
+
+for i in range(0, exchange_AA.lastPrice()[0]+1):
+    try:
+        prices_list_AA.append(exchange_AA.getHistory(i))
+    except: 
+        print(Exception)
+        continue
+
 
 telegram_bot_sendtext("Finished now!")
+print("Finished now!")
 # data = {'TokenCST': prices_list_CST, 'TokenAA': prices_list_AA}
 df_CST = pd.DataFrame(prices_list_CST, columns=['TokenCST'])
 df_AA = pd.DataFrame(prices_list_AA, columns=['TokenAA'])

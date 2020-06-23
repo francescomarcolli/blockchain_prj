@@ -29,4 +29,10 @@ with open('./pyscripts/abi/token_exchange.json') as json_file:
     exchange_abi = json.load(json_file)
 exchange = Contract.from_abi('Exchange', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi=exchange_abi, owner= local_account_admin)
 
-exchange.setOpenTime()
+
+try:
+    telegram_bot_sendtext("Rotating the hours of the market...")
+    exchange.setOpenTime()
+    telegram_bot_sendtext("Rotate complete, goodnight <3")
+except: 
+    telegram_bot_sendtext("Something went wrong: {}".format(Exception))
