@@ -1,7 +1,7 @@
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
 import pandas as pd
-import json
+import json, time
 
 # Connecting to the network
 network_selected = "ropsten"
@@ -25,29 +25,43 @@ with open('../blockchain_course_unimi/challenge/teamCST/abi/PayCoin.json') as js
     pc_abi = json.load(json_file)
 pc = Contract.from_abi('PayCoin', address= _payCoinAddress, abi= pc_abi)
 
+print("Deploying our token...")
 token = local_account_admin.deploy(token_prj.token_erc20)
+print("Token successfully deployed.")
+print("Deploying the exchange...")
 exchange = local_account_admin.deploy(token_prj.token_exchange, token.address, _payCoinAddress)
+print("Exchange succesfully deployed.")
 
+print("Setting exchange priviligies...")
 pc.addMinter(exchange.address, {'from': local_account_admin})
 pc.addBurner(exchange.address, {'from': local_account_admin})
 token.addMinter(exchange.address, {'from': local_account_admin})
 token.addBurner(exchange.address, {'from': local_account_admin})
 
-prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', nrows=8759)
-for j in range(0, 8760): 
-    price = prices.iloc[j]['close']
-    exchange.setHistory(Wei(f"{price} ether"))
-
+print("Deploying the challenge...")
 challenge = local_account_admin.deploy(token_prj.token_challenge, exchange.address, pc.address)
+print("Challenge succesfully deployed.")
 
+print("Setting challenge priviligies...")
 exchange.addBroker(challenge.address, {'from': local_account_admin})
 pc.addMinter(challenge.address, {'from': local_account_admin})
 pc.addBurner(challenge.address, {'from': local_account_admin})
 
+print("Deploying the lender...")
 lender = local_account_admin.deploy(token_prj.Lender, pc.address)
+print("Lender succesfully deployed.")
 
+print("Setting lender priviligies...")
 pc.addMinter(lender.address, {'from': local_account_admin})
 pc.addBurner(lender.address, {'from': local_account_admin})
 
+print("Charging the prices on the exchange...")
+prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', nrows=8759)
+for j in range(0, 8760): 
+    price = prices.iloc[j]['close']
+    print("The price is: {}".format(Wei(f"{price} ether")))
+    exchange.setHistory(Wei(f"{price} ether"))
+    time.sleep(2)
 
+print("All done, bye bye and good luck!")
 
