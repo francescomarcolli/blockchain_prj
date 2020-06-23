@@ -69,7 +69,7 @@ prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', nrows=8
 for j in range(0, 8760): 
     price = prices.iloc[j]['close']
     print("The price is: {}".format(Wei(f"{price} ether")))
-    exchange.setHistory(Wei(f"{price} ether"))
+    exchange.setHistory(Wei(f"{price} ether"), {'from' : local_account_admin})
     print("Price successfully updated.")
     time.sleep(2)
 
