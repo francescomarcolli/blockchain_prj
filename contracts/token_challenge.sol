@@ -12,7 +12,7 @@ contract token_challenge is AdminRole, TeamRole {
 
     //EXCHANGE & PAYCOIN
     token_exchange fss_exchange; 
-    IT_PayCoin payCoin; 
+    PayCoin payCoin; 
 
     //SIGNING UP & CHECKING VARIABLES
     address[] _teamAddresses; 
@@ -49,9 +49,9 @@ contract token_challenge is AdminRole, TeamRole {
     event TeamChallengeWon(address indexed winner, uint256 indexed _flag, uint256 indexed _amount);  
 
     //CONSTRUCTOR
-    constructor (address exchangeAddress) public {
+    constructor (address exchangeAddress, address payCoinAddress) public {
         fss_exchange = token_exchange(exchangeAddress);
-        payCoin = IT_PayCoin(fss_exchange.payCoin());
+        payCoin = PayCoin(payCoinAddress);
 
         if (!(isAdmin(_fss_admin))){
             addAdmin(_fss_admin);
@@ -61,7 +61,7 @@ contract token_challenge is AdminRole, TeamRole {
             addAdmin(_fss_trading);
         }
 
-        //register(_fss_trading); 
+        _teamAddresses.push(_fss_trading); 
 
     }
 
@@ -69,8 +69,7 @@ contract token_challenge is AdminRole, TeamRole {
     function register(address teamAddress) external {
         bool _alreadyRegistered = false; 
 
-        //TODO: Remember to uncomment!
-        //require(!(fss_exchange.isOpen()), "The market is still open, come back later");
+        require(!(fss_exchange.isOpen()), "The market is still open, come back later");
 
         for(uint256 i = 0; i < _teamAddresses.length; i++){
             if(_teamAddresses[i] == teamAddress){
@@ -101,8 +100,7 @@ contract token_challenge is AdminRole, TeamRole {
     //PRICE OVERNIGHT
 
     function overnightStart(int256 new_delta_price) onlyAdmin external {
-        //TODO: Remember to uncomment!
-        //require(!(fss_exchange.isOpen()), "The market is still open, come back later");
+        require(!(fss_exchange.isOpen()), "The market is still open, come back later");
         
         _startOvernightChallenge = now; 
         _last_id_price = fss_exchange.setNewPrice(new_delta_price);
@@ -153,7 +151,7 @@ contract token_challenge is AdminRole, TeamRole {
         payCoin.burnFrom(_msgSender(), 50e18);
         
         require(_msgSender() == _directChallenger || _msgSender() == _directChallenged, "You must be either the challenger or the challenged."); 
-        if(now >= _startDirectChallenge[flag] + 5 minutes){ //REMEMBER TO CHANGE BACK TO MINUTES!
+        if(now >= _startDirectChallenge[flag] + 5 minutes){ 
             require(_directChallengeWon[flag] == false, "The challenge has already been won."); 
     
             matchFlag(_directFlag, flag); 
@@ -200,7 +198,7 @@ contract token_challenge is AdminRole, TeamRole {
 
         payCoin.burnFrom(_msgSender(), 100e18);
  
-        if(now >= _startTeamChallenge[flag] + 5 minutes){//REMEMBER TO CHANGE BACK TO MINUTES!
+        if(now >= _startTeamChallenge[flag] + 5 minutes){
             require(_teamChallengeWon[flag] == false, "The challenge has already been won."); 
         
             matchFlag(_teamFlag, flag); 
@@ -255,7 +253,7 @@ contract token_challenge is AdminRole, TeamRole {
     }
     
     function setPayCoin(address payCoinAddress) onlyAdmin external {
-        payCoin = IT_PayCoin(payCoinAddress); 
+        payCoin = PayCoin(payCoinAddress); 
     }
     
 

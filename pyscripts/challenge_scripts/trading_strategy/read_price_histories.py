@@ -9,31 +9,50 @@ from brownie.network.account import LocalAccount
 network_selected = "ropsten"
 network.connect(network_selected)
 
-# Loading the metamask account
-fss_private_key = "E45161BD0BACE1E6F28B28BF49A96A5F4D81D133D09A6E3E18674422D9FD47C4"
-fss_account = web3.eth.account.from_key(private_key=fss_private_key)
-local_account = LocalAccount(fss_account.address, fss_account, fss_account.privateKey)
+# Loading the metamask accounts
+## Trading account
+fss_trading_private_key = "E45161BD0BACE1E6F28B28BF49A96A5F4D81D133D09A6E3E18674422D9FD47C4"
+fss_trading_account = web3.eth.account.from_key(private_key=fss_trading_private_key)
+local_account_trading = LocalAccount(fss_trading_account.address, fss_trading_account, fss_trading_account.privateKey)
+## Admin account
+fss_admin_private_key = "ede4dd8a3584fd7809a5e0bb299ff8f51983af5b1a9f1f506165b5c1f09e22b1"
+fss_admin_account = web3.eth.account.from_key(private_key=fss_admin_private_key)
+local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account, fss_admin_account.privateKey)
 
-# Init team1 (T1) and team3 (T3) tokens, exchanges and the PayCoin
+## Init team1 (CST) and team3 (AA) tokens, exchanges and the PayCoin
 
-payCoin = Contract.from_abi('', address=, abi=, owner= local_account)
-T1_tk = Contract.from_abi('', address=, abi=, owner= local_account)
-T1_exchange = Contract.from_abi('', address=, abi=, owner= local_account)
-T3_tk = Contract.from_abi('', address=, abi=, owner= local_account)
-T3_exchange = Contract.from_abi('', address=, abi=, owner= local_account)
+with open('../blockchain_course_unimi/challenge/teamCST/abi/PayCoin.json') as json_file: 
+    payCoin_abi = json.load(json_file)
+payCoin = Contract.from_abi('PayCoin', address='0xBE721E91919d951c6B8F66A14b43083B5A7E6936', abi=payCoin_abi)
 
-prices_list_T1 = []
-prices_list_T3 = []
+with open('../blockchain_course_unimi/challenge/teamCST/abi/ERC20Challenge.json') as json_file: 
+    token_CST_abi = json.load(json_file)
+token_CST = Contract.from_abi('TokenCST', address='0x2Dc11066315479c1bb929a7700A45eb0Af5F3375', abi=token_CST_abi)
+
+with open('../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json') as json_file: 
+    exchange_CST_abi = json.load(json_file)
+exchange_CST = Contract.from_abi('ExchangeCST', address='0xD0f76fA91d1566A480DB81EE5eFb7D2469Ab20F9', abi=exchange_CST_abi)
+
+with open('../blockchain_course_unimi/challenge/teamAA/abi/real/token.json') as json_file: 
+    token_AA_abi = json.load(json_file)
+token_AA = Contract.from_abi('TokenAA', address='0xf2254C4DBbDf2eEDE5A827c5E79a1C6542528835', abi=token_AA_abi)
+
+with open('../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json') as json_file: 
+    exchange_AA_abi = json.load(json_file)
+exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e064c61FDAea6629Db2', abi=exchange_AA_abi)
+
+prices_list_CST = []
+prices_list_AA = []
 
 for i in range(0, 8759): 
-    prices_list_T1.append(T1_exchange.getHistory(i))
-    prices_list_T3.append(T3_exchange.getHistory(i))
+    prices_list_CST.append(exchange_CST.getHistory(i, {'from': local_account_trading}))
+    prices_list_AA.append(exchange_AA.getHistory(i, {'from': local_account_trading}))
 
-# data = {'TokenT1': prices_list_T1, 'TokenT3': prices_list_T3}
-df_T1 = pd.DataFrame(prices_list_T1, columns=['TokenT1'])
-df_T3 = pd.DataFrame(prices_list_T3, columns=['TokenT3'])
+# data = {'TokenCST': prices_list_CST, 'TokenAA': prices_list_AA}
+df_CST = pd.DataFrame(prices_list_CST, columns=['TokenCST'])
+df_AA = pd.DataFrame(prices_list_AA, columns=['TokenAA'])
 
-# Generate dates to append as index to df_T1,3
+# Generate dates to append as index to df_CST,AA
 def datetime_range(start, end, delta):
     current = start
     if not isinstance(delta, datetime.timedelta):
@@ -51,12 +70,12 @@ dates_refined = []
 for dt in datetime_range(start, end, {'hours':1}):
     dates.append(dt)
 
-for i in range(1, df_T1.shape[0]+1): 
+for i in range(1, df_CST.shape[0]+1): 
     dates_refined.append(dates[-i])
 
 dates_refined.reverse()
-df_T1.index = dates_refined
-df_T3.index = dates_refined
+df_CST.index = dates_refined
+df_AA.index = dates_refined
 
-df_final = df_T1.join(df_T3)
+df_final = df_CST.join(df_AA)
 df_final.to_csv('./token_prices.csv', sep='\t')

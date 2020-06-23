@@ -7,7 +7,7 @@ import "./AdminRole.sol";
 contract Lender is AdminRole {
     using SafeMath for uint256; 
 
-    IT_PayCoin payCoin;
+    PayCoin payCoin;
 
     mapping (address=>uint256) _loan;
     mapping (address=>uint256) _debt;
@@ -21,7 +21,7 @@ contract Lender is AdminRole {
     event CloseLoan(address indexed who, uint256 indexed id_loan); 
 
     constructor (address payCoinAddress) public {
-        payCoin = IT_PayCoin(payCoinAddress); 
+        payCoin = PayCoin(payCoinAddress); 
     }
 
     function openLoan(uint256 amount) external returns(uint256) {
@@ -57,13 +57,13 @@ contract Lender is AdminRole {
         require(_closed[id_loan] == false, "Loan already closed.");
         return(_id_loan[id_loan], getFee(_id_loan[id_loan], id_loan)); 
     }
-
+    /*
     function penalty(address teamAddress) onlyAdmin external returns(uint256) {
         //require(now >= "18 dell'ultimo giorno");
         payCoin.burnFrom(teamAddress, _debt[teamAddress].mul(15).div(10)); 
         return _debt[teamAddress].mul(15).div(10); 
     }
-
+    */
     function getFee(uint256 amount, uint256 id_loan) internal view returns(uint256) {
         return amount.div(1000).mul(block.number.sub(_blockNumber[id_loan])).div(500); 
     }

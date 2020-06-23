@@ -4,7 +4,7 @@ import numpy as np
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
 
-df = pd.read_csv(r'./token_price.csv', sep='\t', index_col=0, names=['', 'TokenT1', 'TokenT3'], skiprows=8759))
+df = pd.read_csv(r'./token_price.csv', sep='\t', index_col=0, names=['', 'TokenCST', 'TokenAA'], skiprows=8759))
 
 # Calculate short and long MA
 short_MA = df.rolling(window=20).mean()

@@ -12,7 +12,7 @@ contract token_exchange is BrokerRole, AdminRole {
     using SafeMath for int256; 
 
     IT_ERC20 private token;
-    IT_PayCoin public payCoin;
+    PayCoin public payCoin;
 
     uint256 private _openingtime;
     uint256 private _closingtime;
@@ -22,9 +22,6 @@ contract token_exchange is BrokerRole, AdminRole {
 
     uint256 private _start;
     uint256 private _end;
-
-    //address _addressPC ;
-    //= 0xc429620C4451d820B96FD3E5209FADa0F5a89852
 
     address private _fss_admin = 0x2b177c1854DE132E96326B454055005E62feBDc7; 
     address private _fss_trading = 0x85A8d7241Ffffee7290501473A9B11BFdA2Ae9Ff ; 
@@ -40,12 +37,14 @@ contract token_exchange is BrokerRole, AdminRole {
         _;
     }
 
-    constructor() public {
+    constructor(address tokenAddress, address payCoinAddress) public {
 
-        payCoin = new PayCoin();
+        token = token_erc20(tokenAddress);
+        payCoin = PayCoin(payCoinAddress);
 
-        _openingtime = now ;
-        _closingtime = now + 12 hours ; //TODO Remember to modify it!
+        //_openingtime = now ;
+        _openingtime = 1592982000 ; 
+        _closingtime = _openingtime + 9 hours ; 
         _start = _openingtime; 
         _end = _start + 7 days + 9 hours; 
 
@@ -110,7 +109,8 @@ contract token_exchange is BrokerRole, AdminRole {
 
     }
 
-    function isOpen() public view returns (bool) {
+    function isOpen() public view returns(bool) {
+        require(now >= _start && now <= _end, "The market is not open yet.");
         return now >= _openingtime && now <= _closingtime;
     }
 
@@ -167,7 +167,7 @@ contract token_exchange is BrokerRole, AdminRole {
     }
     
     function setPayCoin(address payCoinAddress) onlyAdmin external {
-        payCoin = IT_PayCoin(payCoinAddress); 
+        payCoin = PayCoin(payCoinAddress); 
     }
     
     function changeStart(uint256 start) onlyAdmin external {
