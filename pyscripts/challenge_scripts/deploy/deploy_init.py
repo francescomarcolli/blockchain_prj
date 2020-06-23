@@ -20,7 +20,7 @@ fss_admin_account = web3.eth.account.from_key(private_key=fss_admin_private_key)
 local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account, fss_admin_account.privateKey)
 
 # Deploing and initializing prices
-_payCoinAddress = "0xBE721E91919d951c6B8F66A14b43083B5A7E6936"
+_payCoinAddress = "0xa501cA3B72d8D90235BD8ADb2c67aCc062F451FA"
 with open('../blockchain_course_unimi/challenge/teamCST/abi/PayCoin.json') as json_file: 
     pc_abi = json.load(json_file)
 pc = Contract.from_abi('PayCoin', address= _payCoinAddress, abi= pc_abi)
