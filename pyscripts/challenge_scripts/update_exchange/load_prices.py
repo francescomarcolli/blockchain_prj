@@ -29,7 +29,7 @@ for j in range(0, 8760):
     price = prices.iloc[j]['close']
     print("The price is: {}".format(Wei(f"{price} ether")))
     try:
-        exchange.setHistory(Wei(f"{price} ether"), {'from' : local_account_admin, 'gas_price': Wei("50 gwei"), 'gas_limit': 21000})
+        exchange.setHistory(Wei(f"{price} ether"), {'from' : local_account_admin, 'gas_price': Wei("50 gwei")})
     except Exception as e: 
         print(e)
         continue
