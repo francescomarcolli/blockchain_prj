@@ -1,6 +1,17 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "payCoinAddress",
+        "type": "address"
+      }
+    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -171,21 +182,6 @@
     "type": "event"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "_overnightCalls",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [
       {
@@ -232,6 +228,36 @@
         "type": "bool"
       }
     ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "end",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeEnd",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "start",
+        "type": "uint256"
+      }
+    ],
+    "name": "changeStart",
+    "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
@@ -340,7 +366,7 @@
     "name": "payCoin",
     "outputs": [
       {
-        "internalType": "contract IT_PayCoin",
+        "internalType": "contract PayCoin",
         "name": "",
         "type": "address"
       }
@@ -434,18 +460,33 @@
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "token",
-    "outputs": [
+    "constant": false,
+    "inputs": [
       {
-        "internalType": "contract IT_ERC20",
-        "name": "",
+        "internalType": "address",
+        "name": "payCoinAddress",
         "type": "address"
       }
     ],
+    "name": "setPayCoin",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setToken",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

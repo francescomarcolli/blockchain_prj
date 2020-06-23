@@ -110,7 +110,7 @@ contract token_exchange is BrokerRole, AdminRole {
     }
 
     function isOpen() public view returns(bool) {
-        require(now >= _start && now <= _end, "The market is not open yet.");
+        //require(now >= _start && now <= _end, "The market is not open yet.");
         return now >= _openingtime && now <= _closingtime;
     }
 
