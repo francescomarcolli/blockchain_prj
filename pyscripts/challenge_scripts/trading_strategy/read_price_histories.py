@@ -1,9 +1,18 @@
 import pandas as pd
-
-import datetime, json
+import datetime, json, requests
 
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
+
+def telegram_bot_sendtext(bot_message):
+    
+    bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
+    bot_chatID = '-456518436'
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+
+    response = requests.get(send_text)
+
+    return response.json()
 
 # Connecting to the network
 network_selected = "ropsten"
@@ -33,10 +42,12 @@ prices_list_CST = []
 prices_list_AA = []
 
 #while(exchange_AA.lastPrice()[0] == 8759 and exchange_CST.lastPrice()[0] == 8759): 
+telegram_bot_sendtext("Start reading the prices from the exchanges...")
 for i in range(0, 8760): 
     prices_list_CST.append(exchange_CST.getHistory(i, {'from': local_account_trading}))
     prices_list_AA.append(exchange_AA.getHistory(i, {'from': local_account_trading}))
 
+telegram_bot_sendtext("Finished now!")
 # data = {'TokenCST': prices_list_CST, 'TokenAA': prices_list_AA}
 df_CST = pd.DataFrame(prices_list_CST, columns=['TokenCST'])
 df_AA = pd.DataFrame(prices_list_AA, columns=['TokenAA'])
@@ -68,3 +79,4 @@ df_AA.index = dates_refined
 
 df_final = df_CST.join(df_AA)
 df_final.to_csv('./token_prices.csv', sep='\t')
+telegram_bot_sendtext("All public prices are on the token_prices.csv. Good luck!")
