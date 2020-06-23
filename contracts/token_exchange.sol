@@ -128,8 +128,22 @@ contract token_exchange is BrokerRole, AdminRole {
         return priceHistory[id_price] ;        
     }
 
-    function setHistory(uint256 price) onlyBroker public {
+    function setHistory(uint256 price) internal returns(bool) {
         priceHistory.push(price); 
+        return true;
+    }
+
+    function massiveLoad(uint256 price1, uint256 price2, uint256 price3, uint256 price4, uint256 price5, uint256 price6, uint256 price7, uint256 price8, uint256 price9, uint256 price10) onlyBroker external{
+        setHistory(price1); 
+        setHistory(price2);
+        setHistory(price3);
+        setHistory(price4);
+        setHistory(price5);
+        setHistory(price6);
+        setHistory(price7);
+        setHistory(price8);
+        setHistory(price9);
+        setHistory(price10);
     }
 
     function setNewPrice(int256 delta_price) onlyBroker public returns (uint256) {

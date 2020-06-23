@@ -1,6 +1,16 @@
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
-import json, time, sys, datetime
+import json, time, sys, datetime, requests
+
+def telegram_bot_sendtext(bot_message):
+    
+    bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
+    bot_chatID = '-456518436'
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+
+    response = requests.get(send_text)
+
+    return response.json()
 
 def readLog(tx_hash, logs):
     for log in logs:
@@ -8,6 +18,7 @@ def readLog(tx_hash, logs):
             if(log_entry['event'] == 'DirectChallenge'): 
                 if(log_entry['args']['challenger'] == local_account_trading.address or log_entry['args']['challenged'] == local_account_trading.address):
                     flag = log_entry['args']['_flag']
+                    #telegram_bot_sendtext("")
                     time.sleep(300)
                     try: 
                         payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})

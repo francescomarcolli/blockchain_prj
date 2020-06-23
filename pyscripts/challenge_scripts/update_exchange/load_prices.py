@@ -24,12 +24,31 @@ with open('./pyscripts/abi/token_exchange.json') as json_file:
 exchange = Contract.from_abi('Exchange', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi= exchange_abi)
 
 print("Charging the prices on the exchange...")
-prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', skiprows=659, nrows=8759, names=['', 'close'])
-for j in range(0, 8760): 
-    price = prices.iloc[j]['close']
-    print("The price is: {}".format(Wei(f"{price} ether")))
+prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', nrows=8759)
+for j in range(0, 8760, 10): 
+    price1 = prices.iloc[j]['close']
+    price2 = prices.iloc[j + 1]['close']
+    price3 = prices.iloc[j + 2]['close']
+    price4 = prices.iloc[j + 3]['close']
+    price5 = prices.iloc[j + 4]['close']
+    price6 = prices.iloc[j + 5]['close']
+    price7 = prices.iloc[j + 6]['close']
+    price8 = prices.iloc[j + 7]['close']
+    price9 = prices.iloc[j + 8]['close']
+    price10 = prices.iloc[j + 9]['close']
+    print("The first price is: {} \nThe last price is {}".format(Wei(f"{price1} ether"), Wei(f"{price10} ether")))
     try:
-        exchange.setHistory(Wei(f"{price} ether"), {'from' : local_account_admin, 'gas_price': Wei("40 gwei")})
+        exchange.massiveLoad(Wei(f"{price1} ether"),
+                             Wei(f"{price2} ether"),
+                             Wei(f"{price3} ether"),
+                             Wei(f"{price4} ether"),
+                             Wei(f"{price5} ether"),
+                             Wei(f"{price6} ether"),
+                             Wei(f"{price7} ether"),
+                             Wei(f"{price8} ether"),
+                             Wei(f"{price9} ether"),
+                             Wei(f"{price10} ether"),
+                            {'from' : local_account_admin, 'gas_price': Wei("10 gwei")})
     except Exception as e: 
         print(e)
         continue
