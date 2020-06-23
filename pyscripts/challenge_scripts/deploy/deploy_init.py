@@ -33,7 +33,7 @@ pc.addBurner(exchange.address, {'from': local_account_admin})
 token.addMinter(exchange.address, {'from': local_account_admin})
 token.addBurner(exchange.address, {'from': local_account_admin})
 
-prices = pd.read_csv(r'/home/simone/Desktop/università/blockchain/blockchain_prj/pyscripts/challenge_scripts/price_history.csv', nrows=8759)
+prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', nrows=8759)
 for j in range(0, 8760): 
     price = prices.iloc[j]['close']
     exchange.setHistory(Wei(f"{price} ether"))
