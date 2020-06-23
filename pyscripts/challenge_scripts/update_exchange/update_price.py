@@ -23,9 +23,9 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 with open("./pyscripts/token_exchange.json") as json_file:                                                                                                                                
     exchange_abi = json.load(json_file)
-tk_exchange = Contract.from_abi('Exchange', address="0xA0E802c3582C59bdD1050E3a38b4D2eaCa2F7790", abi= exchange_abi, owner= local_account) 
+exchange = Contract.from_abi('Exchange', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi= exchange_abi, owner= local_account_admin) 
 
-df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=1)
+df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=8759)
 print(df)
 
 df = df.diff()
@@ -41,7 +41,8 @@ while True:
         print("Delta price: {}".format(Wei(f"{df.iloc[i]['delta']} ether")))
         
         price = Wei(f"{df.iloc[i]['delta']} ether")
-        tk_exchange.setNewPrice(price)
+        try: 
+            exchange.setNewPrice(price)
         time.sleep(random.randrange(300, 600))
 
         i = i + 1

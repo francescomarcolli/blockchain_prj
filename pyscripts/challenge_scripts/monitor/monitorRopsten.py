@@ -6,14 +6,17 @@ def readLog(tx_hash, logs):
     for log in logs:
         for log_entry in log:
             if(log_entry['event'] == 'DirectChallenge'): 
-                flag = log_entry['args']['_flag']
-                time.sleep(300)
-                brownieContract.winDirectChallenge(flag)
+                if(log_entry['args']['challenger'] == local_account_trading.address or log_entry['args']['challenged'] == local_account_trading.address):
+                    flag = log_entry['args']['_flag']
+                    time.sleep(300)
+                    try: 
+                        payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})
+                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading})
             
             if(log_entry['event'] == 'DirectChallengeWon'): 
                 winner = log_entry['args']['winner']
                 amount = log_entry['args']['_amount']
-                if( winner == local_account.address): 
+                if( winner == local_account_trading.address): 
                     print("We won the challenge! \nAnd we won: {}".format(amount))
                 else: 
                     print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
@@ -21,12 +24,14 @@ def readLog(tx_hash, logs):
             if(log_entry['event'] == 'TeamChallenge'): 
                 flag = log_entry['args']['_flag']
                 time.sleep(300)
-                brownieContract.winTeamChallenge(flag)
+                try: 
+                    payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
+                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading})
             
             if(log_entry['event'] == 'TeamChallengeWon'): 
                 winner = log_entry['args']['winner']
                 amount = log_entry['args']['_amount']
-                if( winner == local_account.address): 
+                if( winner == local_account_trading.address): 
                     print("We won the challenge! \nAnd we won: {}".format(amount))
                 else: 
                     print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
@@ -36,20 +41,27 @@ def readLog(tx_hash, logs):
                     if(brownieContract.address == teamAddresses['teamCST']['exchangeAddress']):
                         with open(teamAddresses['teamCST']['challengeAbi']) as json_file: 
                             challengeCSTabi = json.load(json_file)
-                        challengeCST = Contract.from_abi('ChallengeCst', address= teamAddresses['teamCST']['challengeAddress'], abi= challengeCSTabi, owner= local_account)
-                        challengeCST.overnightCheck(log_entry['args']['id_price'])
+                        challengeCST = Contract.from_abi('ChallengeCST', address= teamAddresses['teamCST']['challengeAddress'], abi= challengeCSTabi)
+                        try:
+                            challengeCST.overnightCheck(log_entry['args']['id_price'], {'from': local_account_trading})
+                    if(brownieContract.address == teamAddresses['teamAA']['exchangeAddress']):
+                        with open(teamAddresses['teamAA']['challengeAbi']) as json_file: 
+                            challengeAAabi = json.load(json_file)
+                        challengeAA = Contract.from_abi('ChallengeAA', address= teamAddresses['teamAA']['challengeAddress'], abi= challengeAAabi)
+                        try:
+                            challengeAA.overnightCheck(log_entry['args']['id_price'], {'from': local_account_trading})
 
             if(log_entry['event'] == 'Overnight'): 
                 winner = log_entry['args']['winner']
                 amount = log_entry['args']['coin_won']
-                if( winner == local_account.address): 
+                if( winner == local_account_trading.address): 
                     print("We won the challenge! \nAnd we won: {}".format(amount))
                 else: 
                     print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
 
             if(log_entry['event'] == 'Registered'): 
                 teamRegistered = log_entry['event']['teamAddress']
-                if( teamRegistered == local_account.address): 
+                if( teamRegistered == local_account_trading.address): 
                     print("We are registered")
                 #else: 
                     #print("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
@@ -85,8 +97,8 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 # Dict to save the addresses of the various contracts
 
 teamAddresses = {
-                 'teamCST': {'exchangeAddress': '', 'exchangeAbi': '<path_to_abi>', 'challengeAddress': '0xFBAa4B5d08aF2502A84546C2fCef8ba7f023253c', 'challengeAbi' : '<path_to_abi>'}, 
-                 'teamAA' : {'exchangeAddress': '', 'exchangeAbi': '<path_to_abi>', 'challengeAddress': '', 'challengeAbi' : '<path_to_abi>'}
+                 'teamCST': {'exchangeAddress': '0xf6595CF80173Edf534469B15170370AbFF3FDdAb', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json', 'challengeAddress': ' 0x0b6019c547Ba293eBD74991217354b1281209985', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamCST/abi/Challenge.json'}, 
+                 'teamAA' : {'exchangeAddress': '0x5b349092f8F7A4f033743e064c61FDAea6629Db2', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json', 'challengeAddress': '0x40DbeAc4192FCF3901c9B42aDEeDD28B15F8961F', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamAA/abi/real/challenge.json'}
                 }
 
 # checking if the script is called in the right way
@@ -101,9 +113,9 @@ if (len(sys.argv) > 3):
     poll_interval = int(sys.argv[3]) 
 
 # Opening the payCoin contract
-with open("./pyscripts/paycoin_abi.json") as json_file: 
+with open("../blockchain_course_unimi/challenge/teamCST/abi/PayCoin.json") as json_file: 
     abi_pc = json.load(json_file)
-payCoin = Contract.from_abi('PayCoin', address="0x7F7A26538Cb8A2cc93229B782D5b716b47c118CD", abi=abi_pc, owner= local_account)
+payCoin = Contract.from_abi('PayCoin', address="0xa501cA3B72d8D90235BD8ADb2c67aCc062F451FA", abi=abi_pc)
 
 # opening the contract to monitor in web3 and brownie format
 with open(abi_file) as json_file:
@@ -111,7 +123,7 @@ with open(abi_file) as json_file:
 # create the web3 contract object   
 web3Contract = web3.eth.contract(abi=abi_contract, address=address) #create the contract object
 # create the brownie contract object
-brownieContract = Contract.from_abi('bContract', address=address, abi=abi_contract, owner= local_account)
+brownieContract = Contract.from_abi('bContract', address=address, abi=abi_contract)
     
 # saving the latest block number
 startBlock = web3.eth.blockNumber 

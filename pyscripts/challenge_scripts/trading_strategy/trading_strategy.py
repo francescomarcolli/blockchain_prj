@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import datetime
 import random 
+import json 
+import time 
 
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
@@ -25,15 +27,15 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 with open('../blockchain_course_unimi/challenge/teamCST/abi/PayCoin.json') as json_file: 
     payCoin_abi = json.load(json_file)
-payCoin = Contract.from_abi('PayCoin', address='0xBE721E91919d951c6B8F66A14b43083B5A7E6936', abi=payCoin_abi)
+payCoin = Contract.from_abi('PayCoin', address=' 0xa501cA3B72d8D90235BD8ADb2c67aCc062F451FA', abi=payCoin_abi)
 
 with open('../blockchain_course_unimi/challenge/teamCST/abi/ERC20Challenge.json') as json_file: 
     token_CST_abi = json.load(json_file)
-token_CST = Contract.from_abi('TokenCST', address='0x2Dc11066315479c1bb929a7700A45eb0Af5F3375', abi=token_CST_abi)
+token_CST = Contract.from_abi('TokenCST', address=' 0x247aC570E31C7B07829Ddc4B284AB5Bb55BEC825', abi=token_CST_abi)
 
 with open('../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json') as json_file: 
     exchange_CST_abi = json.load(json_file)
-exchange_CST = Contract.from_abi('ExchangeCST', address='0xD0f76fA91d1566A480DB81EE5eFb7D2469Ab20F9', abi=exchange_CST_abi)
+exchange_CST = Contract.from_abi('ExchangeCST', address='0xf6595CF80173Edf534469B15170370AbFF3FDdAb', abi=exchange_CST_abi)
 
 with open('../blockchain_course_unimi/challenge/teamAA/abi/real/token.json') as json_file: 
     token_AA_abi = json.load(json_file)
@@ -92,8 +94,8 @@ while True:
             try: 
                 payCoin.increaseAllowance(exchange_CST.address, amountToBuy, {'from': local_account_trading})
                 exchange_CST.buy(amountToBuy)
-            except Exception as e:
-                print(e)
+            except:
+                continue
 
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] < trading_positions_final_CST.iloc[-2]['TokenCST']): 
             # Sell (remember allowances!) all of our Token_CST
@@ -101,8 +103,8 @@ while True:
             try: 
                 token_CST.increaseAllowance(exchange_CST.address, balance_CST, {'from': local_account_trading})
                 exchange_CST.sell(balance_CST)
-            except Exception as e:
-                print(e)
+            except:
+                continue
 
         ## TokenAA
 
@@ -125,8 +127,8 @@ while True:
             try: 
                 payCoin.increaseAllowance(exchange_AA.address, amountToBuy, {'from': local_account_trading})
                 exchange_AA.buy(amountToBuy)
-            except Exception as e:
-                print(e)
+            except:
+                continue
     
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] < trading_positions_final_AA.iloc[-2]['TokenAA']): 
             # Sell (remember allowances!) all of our Token_AA
@@ -134,8 +136,8 @@ while True:
             try: 
                 token_AA.increaseAllowance(exchange_AA.address, balance_AA, {'from': local_account_trading})
                 exchange_AA.sell(balance_AA)
-            except Exception as e:
-                print(e)
+            except:
+                continue
 
         time.sleep(random.randrange(300, 600))
     else: 
@@ -143,8 +145,8 @@ while True:
         df_final = df_CST.join(df_AA)
         df_final.to_csv('./token_prices.csv', sep='\t')
         # aggiorna l'ora d'inizio alle 9 del giorno dopo
-        start += datetime.timedelta(hours=24)
-        time.sleep(54000‬)
+        start = start + datetime.timedelta(hours=24)
+        time.sleep(54000) 
         
     if(datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)): 
         break

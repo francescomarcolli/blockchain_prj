@@ -1,6 +1,6 @@
 import pandas as pd
 
-import datetime
+import datetime, json
 
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
@@ -21,21 +21,9 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 ## Init team1 (CST) and team3 (AA) tokens, exchanges and the PayCoin
 
-with open('../blockchain_course_unimi/challenge/teamCST/abi/PayCoin.json') as json_file: 
-    payCoin_abi = json.load(json_file)
-payCoin = Contract.from_abi('PayCoin', address='0xBE721E91919d951c6B8F66A14b43083B5A7E6936', abi=payCoin_abi)
-
-with open('../blockchain_course_unimi/challenge/teamCST/abi/ERC20Challenge.json') as json_file: 
-    token_CST_abi = json.load(json_file)
-token_CST = Contract.from_abi('TokenCST', address='0x2Dc11066315479c1bb929a7700A45eb0Af5F3375', abi=token_CST_abi)
-
 with open('../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json') as json_file: 
     exchange_CST_abi = json.load(json_file)
-exchange_CST = Contract.from_abi('ExchangeCST', address='0xD0f76fA91d1566A480DB81EE5eFb7D2469Ab20F9', abi=exchange_CST_abi)
-
-with open('../blockchain_course_unimi/challenge/teamAA/abi/real/token.json') as json_file: 
-    token_AA_abi = json.load(json_file)
-token_AA = Contract.from_abi('TokenAA', address='0xf2254C4DBbDf2eEDE5A827c5E79a1C6542528835', abi=token_AA_abi)
+exchange_CST = Contract.from_abi('ExchangeCST', address='0xf6595CF80173Edf534469B15170370AbFF3FDdAb', abi=exchange_CST_abi)
 
 with open('../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json') as json_file: 
     exchange_AA_abi = json.load(json_file)
@@ -44,7 +32,8 @@ exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e0
 prices_list_CST = []
 prices_list_AA = []
 
-for i in range(0, 8759): 
+#while(exchange_AA.lastPrice()[0] == 8759 and exchange_CST.lastPrice()[0] == 8759): 
+for i in range(0, 8760): 
     prices_list_CST.append(exchange_CST.getHistory(i, {'from': local_account_trading}))
     prices_list_AA.append(exchange_AA.getHistory(i, {'from': local_account_trading}))
 

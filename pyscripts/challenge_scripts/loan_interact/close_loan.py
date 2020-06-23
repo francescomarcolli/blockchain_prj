@@ -18,6 +18,6 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 #payCoin = Contract.from_abi('', address=, abi=, owner= local_account)
 with open("path_to_abi") as json_file:
     abi = json.load(json_file)
-lender = Contract.from_abi('Lender', address=, abi=, owner= local_account)
+#lender = Contract.from_abi('Lender', address=, abi=, owner= local_account_trading)
 
-lender.closeLoan(??id??)
+# lender.closeLoan(??id??)
