@@ -24,12 +24,12 @@ with open('./pyscripts/abi/token_exchange.json') as json_file:
 exchange = Contract.from_abi('Exchange', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi= exchange_abi)
 
 print("Charging the prices on the exchange...")
-prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', skiprows=17, nrows=8759, names=['', 'close'])
+prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', skiprows=659, nrows=8759, names=['', 'close'])
 for j in range(0, 8760): 
     price = prices.iloc[j]['close']
     print("The price is: {}".format(Wei(f"{price} ether")))
     try:
-        exchange.setHistory(Wei(f"{price} ether"), {'from' : local_account_admin})
+        exchange.setHistory(Wei(f"{price} ether"), {'from' : local_account_admin, 'gas_price': Wei("50 gwei"), 'gas_limit': 21000})
     except Exception as e: 
         print(e)
         continue
