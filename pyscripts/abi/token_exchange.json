@@ -361,6 +361,66 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "price1",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price2",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price3",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price4",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price5",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price6",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price7",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price8",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price9",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "price10",
+        "type": "uint256"
+      }
+    ],
+    "name": "massiveLoad",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "payCoin",
@@ -410,21 +470,6 @@
         "type": "bool"
       }
     ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "price",
-        "type": "uint256"
-      }
-    ],
-    "name": "setHistory",
-    "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
