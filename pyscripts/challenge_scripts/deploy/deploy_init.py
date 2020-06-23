@@ -64,7 +64,5 @@ pc.addMinter(lender.address, {'from': local_account_admin})
 time.sleep(2)
 pc.addBurner(lender.address, {'from': local_account_admin})
 
-
-
 print("All done, bye bye and good luck!")
 

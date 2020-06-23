@@ -19,9 +19,9 @@ fss_admin_private_key = "ede4dd8a3584fd7809a5e0bb299ff8f51983af5b1a9f1f506165b5c
 fss_admin_account = web3.eth.account.from_key(private_key=fss_admin_private_key)
 local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account, fss_admin_account.privateKey)
 
-with open('') as json_file: 
+with open('./pyscripts/abi/token_exchange.json') as json_file: 
     exchange_abi = json.load(json_file)
-exchange = Contract.from_abi('Exchange', address="0x609D5595D7B3b8930691A285420Ff24f1C5bD3bF", abi= exchange_abi)
+exchange = Contract.from_abi('Exchange', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi= exchange_abi)
 
 print("Charging the prices on the exchange...")
 prices = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv', nrows=8759)
