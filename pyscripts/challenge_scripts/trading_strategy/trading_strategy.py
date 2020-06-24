@@ -56,8 +56,8 @@ with open('../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json') 
     exchange_AA_abi = json.load(json_file)
 exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e064c61FDAea6629Db2', abi=exchange_AA_abi)
 
-df_CST = pd.read_csv(r'./token_prices.csv', sep='\t', index_col=0, usecols=[0, 1])
-df_AA = pd.read_csv(r'./token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2], nrows=8760)
+df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t', index_col=0, usecols=[0, 1])
+df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2], nrows=8760)
 start = datetime.datetime(2020, 6, 18, 9)
 
 while True: 
