@@ -38,11 +38,11 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 with open('../blockchain_course_unimi/challenge/teamCST/abi/PayCoin.json') as json_file: 
     payCoin_abi = json.load(json_file)
-payCoin = Contract.from_abi('PayCoin', address=' 0xa501cA3B72d8D90235BD8ADb2c67aCc062F451FA', abi=payCoin_abi)
+payCoin = Contract.from_abi('PayCoin', address='0xa501cA3B72d8D90235BD8ADb2c67aCc062F451FA', abi=payCoin_abi)
 
 with open('../blockchain_course_unimi/challenge/teamCST/abi/ERC20Challenge.json') as json_file: 
     token_CST_abi = json.load(json_file)
-token_CST = Contract.from_abi('TokenCST', address=' 0x247aC570E31C7B07829Ddc4B284AB5Bb55BEC825', abi=token_CST_abi)
+token_CST = Contract.from_abi('TokenCST', address='0x247aC570E31C7B07829Ddc4B284AB5Bb55BEC825', abi=token_CST_abi)
 
 with open('../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json') as json_file: 
     exchange_CST_abi = json.load(json_file)
