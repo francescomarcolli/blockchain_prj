@@ -87,8 +87,8 @@ while True:
     if(challenge_FSS.isRegistered(challengedAddress)): 
         try:
             telegram_bot_sendtext("Challing {}".format(challengedAddress))
-            pc.increaseAllowance(challenge_FSS.address, 50e18, {'from': local_account_trading}) 
-            challenge_FSS.challengeStart(challengedAddress, directFlag)
+            pc.increaseAllowance(challenge_FSS.address, 100e18, {'from': local_account_trading}) 
+            challenge_FSS.challengeStart(challengedAddress, directFlag, {'from': local_account_trading})
         except Exception as e: 
             telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
             continue
@@ -100,8 +100,8 @@ while True:
     if(challenge_FSS.isRegistered(opponentsAddresses[0]) and challenge_FSS.isRegistered(opponentsAddresses[1])):
         try: 
             telegram_bot_sendtext("Challenging everyooone!")
-            pc.increaseAllowance(challenge_FSS.address, 100e18, {'from': local_account_trading})
-            challenge_FSS.challengeStart(teamFlag)
+            pc.increaseAllowance(challenge_FSS.address, 200e18, {'from': local_account_trading})
+            challenge_FSS.challengeStart(teamFlag, {'from': local_account_trading})
         except Exception as e:
             telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
             continue
