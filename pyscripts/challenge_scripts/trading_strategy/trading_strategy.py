@@ -98,10 +98,7 @@ while True:
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] > trading_positions_final_CST.iloc[-2]['TokenCST']): 
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = myBalance - (2/1000)*myBalance
-            amountToBuy = 1/2*amountToBuy
-            amountToBuy = amountToBuy/price_valueCST
-            amountToBuy = Wei(f"{amountToBuy} ether")
+            amountToBuy = ((myBalance-(2/1000)*myBalance)/(2*price_valueCST))*10**18
 
             try: 
                 if(payCoin.allowance(local_account_trading.address, exchange_CST.address) < amountToBuy):
@@ -141,10 +138,7 @@ while True:
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] > trading_positions_final_AA.iloc[-2]['TokenAA']): 
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = myBalance - (2/1000)*myBalance
-            amountToBuy = 1/2*amountToBuy
-            amountToBuy = amountToBuy/price_valueAA
-            amountToBuy = Wei(f"{amountToBuy} ether")
+            amountToBuy = ((myBalance-(2/1000)*myBalance)/(2*price_valueAA))*10**18
 
             try: 
                 if(payCoin.allowance(local_account_trading.address, exchange_AA.address) < amountToBuy):
@@ -176,7 +170,7 @@ while True:
         start = start + datetime.timedelta(hours=24)
         telegram_bot_sendtext("Script: trading_strategies.py \nTrading day finished. \nGoing to sleep, goodnight <3")
         while(datetime.datetime.now() <= start): 
-            time.sleep(3600)
+            time.sleep(600)
         telegram_bot_sendtext("Script: trading_strategies.py \nGoodmorning <3 \nRise and shine!. \nLet me drink my coffee and I will start trading.")
 
     if(datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)): 
