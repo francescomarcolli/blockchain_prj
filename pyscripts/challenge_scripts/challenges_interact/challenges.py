@@ -69,18 +69,20 @@ while True:
                 telegram_bot_sendtext("Already registered on contract: {}".format(contract.address))
 
     # Launching PriceOvernight (I'm a WHAAALE)
-    lastPrice = exchange_FSS.lastPrice()[1]
-    _lastCall = datetime.datetime.now() - datetime.timedelta(hours= 50)
-    if(not(exchange_FSS.isOpen()) and _overnightCalls <= 4 and _lastCall < _lastCall + datetime.timedelta(hours= 48)):
-        delta_price = random.randint(lastPrice - (8*lastPrice/100), lastPrice + (8*lastPrice/100)) 
-        try:
-            telegram_bot_sendtext("Whaling cause it's fun!")
-            challenge_FSS.overnightStart(delta_price, {'from': local_account_trading})
-        except Exception as e: 
-            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
-            continue
-        _overnightCalls = _overnightCalls + 1
-        _lastCall = datetime.datetime.now()
+    #lastPrice = exchange_FSS.lastPrice()[1]
+    #_lastCall = datetime.datetime.now() - datetime.timedelta(hours= 50)
+    #if(not(exchange_FSS.isOpen()) and _overnightCalls <= 4 and _lastCall < _lastCall + datetime.timedelta(hours= 48)):
+    #    delta_price = random.randint(lastPrice - (8*lastPrice/100), lastPrice + (8*lastPrice/100)) 
+    #    telegram_bot_sendtext("lastPrice: {} \nDelta price: {}".format(lastPrice, delta_price))
+    #    break
+    #    try:
+    #        telegram_bot_sendtext("Whaling cause it's fun!")
+    #        challenge_FSS.overnightStart(delta_price, {'from': local_account_trading})
+    #    except Exception as e: 
+    #        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
+    #        continue
+    #    _overnightCalls = _overnightCalls + 1
+    #    _lastCall = datetime.datetime.now()
     
     # Launching DirectChallenge
     
