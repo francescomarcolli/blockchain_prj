@@ -12,7 +12,7 @@ def telegram_bot_sendtext(bot_message):
     
     bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
     bot_chatID = '-456518436'
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&text=' + bot_message
 
     response = requests.get(send_text)
 
@@ -36,7 +36,7 @@ with open("./pyscripts/abi/token_exchange.json") as json_file:
     exchange_abi = json.load(json_file)
 exchange = Contract.from_abi('Exchange', address="0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110", abi= exchange_abi, owner= local_account_admin) 
 
-df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=8785)
+df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=8830)
 #print(df)
 
 df = df.diff()
