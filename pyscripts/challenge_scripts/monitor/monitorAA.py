@@ -22,8 +22,8 @@ def readLog(tx_hash, logs):
                     time.sleep(300)
                     try: 
                         telegram_bot_sendtext("Sending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                        payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})
-                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading})
+                        payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
                     except Exception as e: 
                         telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, e))
                         continue
@@ -42,8 +42,8 @@ def readLog(tx_hash, logs):
                 time.sleep(300)
                 try: 
                     telegram_bot_sendtext("Sending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                    payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
-                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading})
+                    payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
                 except Exception as e: 
                     telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, e))
                     continue
@@ -89,7 +89,7 @@ def readLog(tx_hash, logs):
                     telegram_bot_sendtext("The challenge has been won by: {} \nAnd they won: {}".format(winner, amount))
 
             if(log_entry['event'] == 'Registered'): 
-                teamRegistered = log_entry['event']['teamAddres']
+                teamRegistered = log_entry['args']['teamAddres']
                 if( teamRegistered == local_account_trading.address): 
                     telegram_bot_sendtext("We are signed in on the contract {}".format(brownieContract.address))
                 #else: 
@@ -97,9 +97,9 @@ def readLog(tx_hash, logs):
 
 
 def monitorContract(web3Contract, blockNumber):  
-    print('BlockNumber: {} \nLatest Block: {}'.format(startBlock, web3.eth.blockNumber) )          
+    #print('BlockNumber: {} \nLatest Block: {}'.format(startBlock, web3.eth.blockNumber) )          
     if(web3.eth.blockNumber != blockNumber):
-        print('Latest BLock after if: {}'.format(web3.eth.blockNumber))
+        #print('Latest BLock after if: {}'.format(web3.eth.blockNumber))
         all_events = web3.eth.getLogs({'fromBlock': blockNumber, 'toBlock': 'latest', 'address': web3Contract.address})
 
         for event_data in all_events: 
@@ -153,13 +153,32 @@ with open(abi_file) as json_file:
 web3Contract = web3.eth.contract(abi=abi_contract, address=address) #create the contract object
 # create the brownie contract object
 brownieContract = Contract.from_abi('bContract', address=address, abi=abi_contract)
-    
+
+if(brownieContract.address == teamAddresses['teamAA']['exchangeAddress']):
+    lastPrice = brownieContract.lastPrice()[1]
+
 # saving the latest block number
 startBlock = web3.eth.blockNumber 
 #telegram_bot_sendtext("Initial block: {}".format(startBlock))
 # start monitoring the contract on the blockchain
+telegram_bot_sendtext("Start monitoring contract: {}".format(brownieContract.address))
 while True: 
     monitorContract(web3Contract, startBlock)
+
+    if(brownieContract.address == teamAddresses['teamAA']['exchangeAddress']):
+        if(not(brownieContract.isOpen()) and lastPrice != brownieContract.lastPrice()[1]):
+            id_lastPrice = brownieContract.lastPrice()[0]
+            lastPrice = brownieContract.lastPrice()[1]
+            with open(teamAddresses['teamAA']['challengeAbi']) as json_file: 
+                challengeAAabi = json.load(json_file)
+            challengeAA = Contract.from_abi('ChallengeAA', address= teamAddresses['teamAA']['challengeAddress'], abi= challengeAAabi)
+            try:
+                telegram_bot_sendtext("Trying to catch the whale on contract: {}".format(brownieContract.address))
+                challengeAA.overnightCheck(id_lastPrice, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+            except Exception as e:
+                telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, e))
+                continue
+
     startBlock = web3.eth.blockNumber
     time.sleep(poll_interval)
     #print('BlockNumber: {}'.format(startBlock) )
