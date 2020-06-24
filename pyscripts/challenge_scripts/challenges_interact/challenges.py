@@ -48,7 +48,7 @@ challenge_FSS = Contract.from_abi('ChallengeFSS', address="0x1d935B72E9AC4823BA0
 
 with open('./pyscripts/abi/token_exchange.json') as json_file: 
     exchange_FSS_abi = json.load(json_file)
-exchange_FSS = Contract.from_abi('ExchangeFSS', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi= exchange_FSS_abi)
+exchange_FSS = Contract.from_abi('ExchangeFSS', address="0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110", abi= exchange_FSS_abi)
 
 _overnightCalls = 0
 

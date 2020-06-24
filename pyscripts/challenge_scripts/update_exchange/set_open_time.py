@@ -27,7 +27,7 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 with open('./pyscripts/abi/token_exchange.json') as json_file: 
     exchange_abi = json.load(json_file)
-exchange = Contract.from_abi('Exchange', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi=exchange_abi, owner= local_account_admin)
+exchange = Contract.from_abi('Exchange', address="0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110", abi=exchange_abi, owner= local_account_admin)
 
 
 try:
