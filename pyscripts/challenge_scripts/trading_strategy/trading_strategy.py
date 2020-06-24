@@ -57,7 +57,7 @@ with open('../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json') 
 exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e064c61FDAea6629Db2', abi=exchange_AA_abi)
 
 df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t', index_col=0, usecols=[0, 1])
-df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2], nrows=8760)
+df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2])
 start = datetime.datetime(2020, 6, 24, 9)
 telegram_bot_sendtext("All good, starting trading!")
 
@@ -101,10 +101,10 @@ while True:
 
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] > trading_positions_final_CST.iloc[-2]['TokenCST']): 
             # Buy exactly amount of token that costs half of our PCO balance 
-            myBalance = 1/2 * payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = myBalance - (2/1000)*myBalance
+            myBalance = payCoin.balanceOf(local_account_trading.address)
+            amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) 
             try: 
-                payCoin.increaseAllowance(exchange_CST.address, amountToBuy, {'from': local_account_trading})
+                payCoin.increaseAllowance(exchange_CST.address, myBalance, {'from': local_account_trading})
                 exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
             except Exception as e:
@@ -138,10 +138,10 @@ while True:
 
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] > trading_positions_final_AA.iloc[-2]['TokenAA']): 
             # Buy exactly amount of token that costs half of our PCO balance 
-            myBalance = 1/2 * payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = myBalance - (2/1000)*myBalance
+            myBalance = payCoin.balanceOf(local_account_trading.address)
+            amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance)
             try: 
-                payCoin.increaseAllowance(exchange_AA.address, amountToBuy, {'from': local_account_trading})
+                payCoin.increaseAllowance(exchange_AA.address, myBalance, {'from': local_account_trading})
                 exchange_AA.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
             except Exception as e:
