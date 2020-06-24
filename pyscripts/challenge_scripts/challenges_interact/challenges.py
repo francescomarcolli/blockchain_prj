@@ -68,7 +68,7 @@ while True:
 
     # Launching PriceOvernight (I'm a WHAAALE)
     lastPrice = exchange_FSS.lastPrice()[1]
-    _lastCall = 0
+    _lastCall = datetime.datetime.now() - datetime.timedelta(hours= 50)
     if(not(exchange_FSS.isOpen()) and _overnightCalls <= 4 and _lastCall < _lastCall + datetime.timedelta(hours= 48)):
         delta_price = random.randint(lastPrice - (lastPrice/10), lastPrice + (lastPrice/10)) 
         try:
