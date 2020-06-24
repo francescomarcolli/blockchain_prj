@@ -8,7 +8,7 @@ contract token_challenge is AdminRole, TeamRole {
 
     //address _exchangeAddress; 
     address private _fss_admin = 0x2b177c1854DE132E96326B454055005E62feBDc7; 
-    address private _fss_trading = 0x85A8d7241Ffffee7290501473A9B11BFdA2Ae9Ff ;
+    address private _fss_trading = 0x27C404d4D91156F7063E8dB9cC10970cfffF9a6C;
 
     //EXCHANGE & PAYCOIN
     token_exchange fss_exchange; 
