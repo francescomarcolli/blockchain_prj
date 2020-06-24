@@ -26,7 +26,7 @@ network.connect(network_selected)
 
 # Loading the metamask accounts
 ## Trading account
-fss_trading_private_key = "E45161BD0BACE1E6F28B28BF49A96A5F4D81D133D09A6E3E18674422D9FD47C4"
+fss_trading_private_key = "faba88e53b6fac655f7e0b5cb900e0bc045e787eb850fdf17f458f0fb8607bde"
 fss_trading_account = web3.eth.account.from_key(private_key=fss_trading_private_key)
 local_account_trading = LocalAccount(fss_trading_account.address, fss_trading_account, fss_trading_account.privateKey)
 ## Admin account
@@ -59,6 +59,7 @@ exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e0
 df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t', index_col=0, usecols=[0, 1])
 df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2], nrows=8760)
 start = datetime.datetime(2020, 6, 24, 9)
+telegram_bot_sendtext("All good, starting trading!")
 
 while True: 
     
@@ -104,9 +105,10 @@ while True:
             amountToBuy = myBalance - (2/1000)*myBalance
             try: 
                 payCoin.increaseAllowance(exchange_CST.address, amountToBuy, {'from': local_account_trading})
-                exchange_CST.buy(amountToBuy)
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
+                telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
             except Exception as e:
-                telegram_bot_sendtext("Trading failed while buying CST tokens! \nError: {} \nCheck asap!".format(e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying CST tokens! \nError: {} \nCheck asap!".format(e))
                 continue
 
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] < trading_positions_final_CST.iloc[-2]['TokenCST']): 
@@ -114,9 +116,10 @@ while True:
             balance_CST = token_CST.balanceOf(local_account_trading.address)
             try: 
                 token_CST.increaseAllowance(exchange_CST.address, balance_CST, {'from': local_account_trading})
-                exchange_CST.sell(balance_CST)
+                exchange_CST.sell(balance_CST, {'from': local_account_trading})
+                telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST sold: {}".format(balance_CST))
             except Exception as e:
-                telegram_bot_sendtext("Trading failed while selling CST tokens! \nError: {} \nCheck asap!".format(e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while selling CST tokens! \nError: {} \nCheck asap!".format(e))
                 continue
 
         ## TokenAA
@@ -139,9 +142,10 @@ while True:
             amountToBuy = myBalance - (2/1000)*myBalance
             try: 
                 payCoin.increaseAllowance(exchange_AA.address, amountToBuy, {'from': local_account_trading})
-                exchange_AA.buy(amountToBuy)
+                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
+                telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
             except Exception as e:
-                telegram_bot_sendtext("Trading failed while buying AA tokens! \nError: {} \nCheck asap!".format(e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying AA tokens! \nError: {} \nCheck asap!".format(e))
                 continue
     
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] < trading_positions_final_AA.iloc[-2]['TokenAA']): 
@@ -149,12 +153,12 @@ while True:
             balance_AA = token_AA.balanceOf(local_account_trading.address)
             try: 
                 token_AA.increaseAllowance(exchange_AA.address, balance_AA, {'from': local_account_trading})
-                exchange_AA.sell(balance_AA)
+                exchange_AA.sell(balance_AA, {'from': local_account_trading})
+                telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA sold: {}".format(balance_AA))
             except Exception as e:
-                telegram_bot_sendtext("Trading failed while selling AA tokens! \nError: {} \nCheck asap!".format(e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while selling AA tokens! \nError: {} \nCheck asap!".format(e))
                 continue
         
-        telegram_bot_sendtext("Sleeping a bit, like 10 minutes...")
         time.sleep(random.randrange(300, 600))
     else: 
         # butta il df sul csv
@@ -162,8 +166,9 @@ while True:
         df_final.to_csv('./token_prices.csv', sep='\t')
         # aggiorna l'ora d'inizio alle 9 del giorno dopo
         start = start + datetime.timedelta(hours=24)
-        telegram_bot_sendtext("Trading day finished. \nGoing to sleep, goodnight <3")
+        telegram_bot_sendtext("Script: trading_strategies.py \nTrading day finished. \nGoing to sleep, goodnight <3")
         time.sleep(54000) 
-        
+        telegram_bot_sendtext("Script: trading_strategies.py \nGoodmorning <3 \nRise and shine!. \nLet me drink my coffee and I will start trading.")
+
     if(datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)): 
         break

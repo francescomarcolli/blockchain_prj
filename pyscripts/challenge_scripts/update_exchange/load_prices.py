@@ -11,7 +11,7 @@ network.connect(network_selected)
 token_prj = project.load("./", name="TokenPrj")
 
 ## Trading account
-fss_trading_private_key = "E45161BD0BACE1E6F28B28BF49A96A5F4D81D133D09A6E3E18674422D9FD47C4"
+fss_trading_private_key = "faba88e53b6fac655f7e0b5cb900e0bc045e787eb850fdf17f458f0fb8607bde"
 fss_trading_account = web3.eth.account.from_key(private_key=fss_trading_private_key)
 local_account_trading = LocalAccount(fss_trading_account.address, fss_trading_account, fss_trading_account.privateKey)
 ## Admin account
