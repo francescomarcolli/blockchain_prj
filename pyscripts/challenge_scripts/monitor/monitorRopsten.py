@@ -6,7 +6,7 @@ def telegram_bot_sendtext(bot_message):
     
     bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
     bot_chatID = '-456518436'
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&text=' + bot_message
 
     response = requests.get(send_text)
 
@@ -24,8 +24,8 @@ def readLog(tx_hash, logs):
                         telegram_bot_sendtext("Sending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
                         payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})
                         brownieContract.winDirectChallenge(flag, {'from': local_account_trading})
-                    except: 
-                        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                    except Exception as e: 
+                        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, e))
                         continue
             
             if(log_entry['event'] == 'DirectChallengeWon'): 
@@ -44,8 +44,8 @@ def readLog(tx_hash, logs):
                     telegram_bot_sendtext("Sending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
                     payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
                     brownieContract.winTeamChallenge(flag, {'from': local_account_trading})
-                except: 
-                    telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                except Exception as e: 
+                    telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, e))
                     continue
             
             if(log_entry['event'] == 'TeamChallengeWon'): 
@@ -66,8 +66,8 @@ def readLog(tx_hash, logs):
                         try:
                             telegram_bot_sendtext("Trying to catch the whale on contract: {}".format(brownieContract.address))
                             challengeCST.overnightCheck(log_entry['args']['id_price'], {'from': local_account_trading})
-                        except:
-                            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                        except Exception as e:
+                            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, e))
                             continue
                     if(brownieContract.address == teamAddresses['teamAA']['exchangeAddress']):
                         with open(teamAddresses['teamAA']['challengeAbi']) as json_file: 
@@ -76,8 +76,8 @@ def readLog(tx_hash, logs):
                         try:
                             telegram_bot_sendtext("Trying to catch the whale on contract: {}".format(brownieContract.address))
                             challengeAA.overnightCheck(log_entry['args']['id_price'], {'from': local_account_trading})
-                        except:
-                            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, Exception))
+                        except Exception as e:
+                            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(brownieContract.address, e))
                             continue
 
             if(log_entry['event'] == 'Overnight'): 
@@ -108,7 +108,6 @@ def monitorContract(web3Contract, blockNumber):
             events = [event['name'] for event in web3Contract.events._events]
             logs = [ web3Contract.events.__dict__[event_name]().processReceipt(receipt) for event_name in events ]
             readLog(tx_hash, logs)
-            #logs = [ contract.events.OpenLoan().processReceipt(receipt) for event_name in events ]
 
 network_selected = "ropsten"
 network.connect(network_selected)
@@ -157,15 +156,12 @@ brownieContract = Contract.from_abi('bContract', address=address, abi=abi_contra
     
 # saving the latest block number
 startBlock = web3.eth.blockNumber 
-
-print('Listening to transactions...')
-
+telegram_bot_sendtext("Initial block: {}".format(startBlock))
 # start monitoring the contract on the blockchain
 while True: 
     monitorContract(web3Contract, startBlock)
     startBlock = web3.eth.blockNumber
     time.sleep(poll_interval)
-    print('Listening to transactions...')
     #print('BlockNumber: {}'.format(startBlock) )
      
 
