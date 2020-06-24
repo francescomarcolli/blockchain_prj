@@ -108,7 +108,7 @@ while True:
                 exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
             except Exception as e:
-                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying CST tokens! \nError: {} \nCheck asap!".format(e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying CST tokens! \nPaC balance: {} \nTk amount: \nError: {} \nCheck asap!".format(myBalance, amountToBuy, e))
                 continue
 
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] < trading_positions_final_CST.iloc[-2]['TokenCST']): 
@@ -145,7 +145,7 @@ while True:
                 exchange_AA.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
             except Exception as e:
-                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying AA tokens! \nError: {} \nCheck asap!".format(e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying AA tokens! \nPaC balance: {} \nTk amount: {}\nError: {} \nCheck asap!".format(myBalance, amountToBuy, e))
                 continue
     
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] < trading_positions_final_AA.iloc[-2]['TokenAA']): 
