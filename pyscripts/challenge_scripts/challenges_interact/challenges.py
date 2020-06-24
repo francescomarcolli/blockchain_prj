@@ -9,7 +9,7 @@ def telegram_bot_sendtext(bot_message):
     
     bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
     bot_chatID = '-456518436'
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&text=' + bot_message
 
     response = requests.get(send_text)
 
@@ -53,17 +53,18 @@ exchange_FSS = Contract.from_abi('ExchangeFSS', address="0xc9aaE2ADa5a5b650b4846
 _overnightCalls = 0
 
 challengeContracts = [challenge_FSS, challenge_AA, challenge_CST]
-opponentsAddresses = []
+opponentsAddresses = ['0xe5e619C1cE24A3c5083D6c30FAD80Dbe4D8FFd39', '0xe6a2234764Bd7a41Da73bd91F9E857819d20b22F']
 
 while True: 
     
     # Patto di non belligeranza: non lanciamo challenge dagli smart contracts dei team avversari
     # anche se si dovrebbe poter fare. 
     
-    for contract in challengeContracts: 
-        if(contract.isRegistered() == False): 
-            telegram_bot_sendtext("Registering our account on contract {}".format(contract.address))
-            contract.Register(local_account_trading.address)
+    if(not(exchange_FSS.isOpen())):
+        for contract in challengeContracts: 
+            if(contract.isRegistered() == False): 
+                telegram_bot_sendtext("Registering our account on contract {}".format(contract.address))
+                contract.Register(local_account_trading.address)
 
     # Launching PriceOvernight (I'm a WHAAALE)
     lastPrice = exchange_FSS.lastPrice()[1]
@@ -73,8 +74,8 @@ while True:
         try:
             telegram_bot_sendtext("Whaling cause it's fun!")
             challenge_FSS.overnightStart(delta_price, {'from': local_account_trading})
-        except: 
-            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
+        except Exception as e: 
+            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
             continue
         _overnightCalls = _overnightCalls + 1
         _lastCall = datetime.datetime.now()
@@ -82,26 +83,28 @@ while True:
     # Launching DirectChallenge
     
     challengedAddress = random.choice(opponentsAddresses)
-    directFlag = random.randrange(1e18) 
-    try:
-        telegram_bot_sendtext("Challing {}".format(challengedAddress))
-        pc.increaseAllowance(challenge_FSS.address, 50e18, {'from': local_account_trading}) 
-        challenge_FSS.challengeStart(challengedAddress, directFlag)
-    except: 
-        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
-        continue
+    directFlag = random.randrange(1e18)
+    if(challenge_FSS.isRegistered(challengedAddress)): 
+        try:
+            telegram_bot_sendtext("Challing {}".format(challengedAddress))
+            pc.increaseAllowance(challenge_FSS.address, 50e18, {'from': local_account_trading}) 
+            challenge_FSS.challengeStart(challengedAddress, directFlag)
+        except Exception as e: 
+            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
+            continue
     
     time.sleep(random.randint(21600, 28800))
     # Launching TeamChallenge
 
     teamFlag = random.randrange(1e18)
-    try: 
-        telegram_bot_sendtext("Challing everyooone!")
-        pc.increaseAllowance(challenge_FSS.address, 100e18, {'from': local_account_trading})
-        challenge_FSS.challengeStart(teamFlag)
-    except:
-        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
-        continue
+    if(challenge_FSS.isRegistered(opponentsAddresses[0]) and challenge_FSS.isRegistered(opponentsAddresses[1])):
+        try: 
+            telegram_bot_sendtext("Challenging everyooone!")
+            pc.increaseAllowance(challenge_FSS.address, 100e18, {'from': local_account_trading})
+            challenge_FSS.challengeStart(teamFlag)
+        except Exception as e:
+            telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
+            continue
     
     time.sleep(random.randint(21600, 28800))
 

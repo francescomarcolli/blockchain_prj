@@ -36,13 +36,13 @@ with open("./pyscripts/abi/token_exchange.json") as json_file:
     exchange_abi = json.load(json_file)
 exchange = Contract.from_abi('Exchange', address="0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110", abi= exchange_abi, owner= local_account_admin) 
 
-df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=8769)
+df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=8785)
 #print(df)
 
 df = df.diff()
 
 i = 1
-start = datetime.datetime.now()
+start = datetime.datetime(2020, 6, 24, 9)
 
 while True:
 
@@ -52,7 +52,7 @@ while True:
         
         price = Wei(f"{df.iloc[i]['delta']} ether")
         try: 
-            exchange.setNewPrice(price, {'from': local_account_admin, 'gas_price': Wei("5 gwei")})
+            exchange.setNewPrice(price, {'from': local_account_admin, 'gas_price': Wei("2 gwei")})
         except: 
             telegram_bot_sendtext("Couldn't load price correctly, please check asap!")
             continue 
@@ -60,7 +60,10 @@ while True:
         time.sleep(random.randrange(300, 600))
         i = i + 1
     else:
-        time.sleep(54000)
-
+        start = start + datetime.timedelta(hours=24)
+        telegram_bot_sendtext("Script: update_price.py \nTrading day finished. \nGoing to sleep, goodnight <3")
+        time.sleep(54000) 
+        telegram_bot_sendtext("Script: update_price.py \nGoodmorning <3 \nRise and shine!. \nLet me drink my coffee and I will start updating.")
+    
     if (datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)):
         break
