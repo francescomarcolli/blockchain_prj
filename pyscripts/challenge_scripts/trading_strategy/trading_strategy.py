@@ -105,8 +105,8 @@ while True:
             try: 
                 payCoin.increaseAllowance(exchange_CST.address, amountToBuy, {'from': local_account_trading})
                 exchange_CST.buy(amountToBuy)
-            except:
-                telegram_bot_sendtext("Trading failed while buying CST tokens! \nError: {} \nCheck asap!".format(Exception))
+            except Exception as e:
+                telegram_bot_sendtext("Trading failed while buying CST tokens! \nError: {} \nCheck asap!".format(e))
                 continue
 
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] < trading_positions_final_CST.iloc[-2]['TokenCST']): 
@@ -115,8 +115,8 @@ while True:
             try: 
                 token_CST.increaseAllowance(exchange_CST.address, balance_CST, {'from': local_account_trading})
                 exchange_CST.sell(balance_CST)
-            except:
-                telegram_bot_sendtext("Trading failed while selling CST tokens! \nError: {} \nCheck asap!".format(Exception))
+            except Exception as e:
+                telegram_bot_sendtext("Trading failed while selling CST tokens! \nError: {} \nCheck asap!".format(e))
                 continue
 
         ## TokenAA
@@ -140,8 +140,8 @@ while True:
             try: 
                 payCoin.increaseAllowance(exchange_AA.address, amountToBuy, {'from': local_account_trading})
                 exchange_AA.buy(amountToBuy)
-            except:
-                telegram_bot_sendtext("Trading failed while buying AA tokens! \nError: {} \nCheck asap!".format(Exception))
+            except Exception as e:
+                telegram_bot_sendtext("Trading failed while buying AA tokens! \nError: {} \nCheck asap!".format(e))
                 continue
     
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] < trading_positions_final_AA.iloc[-2]['TokenAA']): 
@@ -150,10 +150,11 @@ while True:
             try: 
                 token_AA.increaseAllowance(exchange_AA.address, balance_AA, {'from': local_account_trading})
                 exchange_AA.sell(balance_AA)
-            except:
-                telegram_bot_sendtext("Trading failed while selling AA tokens! \nError: {} \nCheck asap!".format(Exception))
+            except Exception as e:
+                telegram_bot_sendtext("Trading failed while selling AA tokens! \nError: {} \nCheck asap!".format(e))
                 continue
-
+        
+        telegram_bot_sendtext("Sleeping a bit, like 10 minutes...")
         time.sleep(random.randrange(300, 600))
     else: 
         # butta il df sul csv
