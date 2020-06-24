@@ -104,7 +104,7 @@ while True:
             myBalance = payCoin.balanceOf(local_account_trading.address)
             amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) / exchange_CST.lastPrice()[1]
             try: 
-                payCoin.increaseAllowance(exchange_CST.address, myBalance, {'from': local_account_trading})
+                payCoin.increaseAllowance(exchange_CST.address, amountToBuy * 10, {'from': local_account_trading})
                 exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
             except Exception as e:
@@ -141,7 +141,7 @@ while True:
             myBalance = payCoin.balanceOf(local_account_trading.address)
             amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) / exchange_AA.lastPrice()[1]
             try: 
-                payCoin.increaseAllowance(exchange_AA.address, myBalance, {'from': local_account_trading})
+                payCoin.increaseAllowance(exchange_AA.address, amountToBuy * 10, {'from': local_account_trading})
                 exchange_AA.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
             except Exception as e:
