@@ -103,6 +103,7 @@ while True:
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
             amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) / exchange_CST.lastPrice()[1]
+            amountToBuy = amountToBuy**(10*18)
             try: 
                 payCoin.increaseAllowance(exchange_CST.address, amountToBuy * 10, {'from': local_account_trading})
                 exchange_CST.buy(amountToBuy, {'from': local_account_trading})
@@ -140,6 +141,7 @@ while True:
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
             amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) / exchange_AA.lastPrice()[1]
+            amountToBuy = amountToBuy**(10*18)
             try: 
                 payCoin.increaseAllowance(exchange_AA.address, amountToBuy * 10, {'from': local_account_trading})
                 exchange_AA.buy(amountToBuy, {'from': local_account_trading})
