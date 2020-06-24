@@ -58,7 +58,7 @@ exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e0
 
 df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t', index_col=0, usecols=[0, 1])
 df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2], nrows=8760)
-start = datetime.datetime(2020, 6, 18, 9)
+start = datetime.datetime(2020, 6, 24, 9)
 
 while True: 
     
@@ -161,6 +161,7 @@ while True:
         df_final.to_csv('./token_prices.csv', sep='\t')
         # aggiorna l'ora d'inizio alle 9 del giorno dopo
         start = start + datetime.timedelta(hours=24)
+        telegram_bot_sendtext("Trading day finished. \nGoing to sleep, goodnight <3")
         time.sleep(54000) 
         
     if(datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)): 
