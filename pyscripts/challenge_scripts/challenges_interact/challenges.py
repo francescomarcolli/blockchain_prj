@@ -62,7 +62,7 @@ while True:
     
     if(not(exchange_FSS.isOpen())):
         for contract in challengeContracts: 
-            if(contract.isRegistered() == False): 
+            if(contract.isRegistered(local_account_trading.address) == False): 
                 telegram_bot_sendtext("Registering our account on contract {}".format(contract.address))
                 contract.Register(local_account_trading.address)
 
