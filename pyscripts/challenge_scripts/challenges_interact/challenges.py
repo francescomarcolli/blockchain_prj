@@ -65,12 +65,14 @@ while True:
             if(contract.isRegistered(local_account_trading.address) == False): 
                 telegram_bot_sendtext("Registering our account on contract {}".format(contract.address))
                 contract.Register(local_account_trading.address)
+            else: 
+                telegram_bot_sendtext("Already registered on contract: {}".format(contract.address))
 
     # Launching PriceOvernight (I'm a WHAAALE)
     lastPrice = exchange_FSS.lastPrice()[1]
     _lastCall = datetime.datetime.now() - datetime.timedelta(hours= 50)
     if(not(exchange_FSS.isOpen()) and _overnightCalls <= 4 and _lastCall < _lastCall + datetime.timedelta(hours= 48)):
-        delta_price = random.randint(lastPrice - (lastPrice/10), lastPrice + (lastPrice/10)) 
+        delta_price = random.randint(lastPrice - (8*lastPrice/100), lastPrice + (8*lastPrice/100)) 
         try:
             telegram_bot_sendtext("Whaling cause it's fun!")
             challenge_FSS.overnightStart(delta_price, {'from': local_account_trading})
