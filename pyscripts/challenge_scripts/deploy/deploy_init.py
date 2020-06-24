@@ -27,7 +27,7 @@ pc = Contract.from_abi('PayCoin', address= _payCoinAddress, abi= pc_abi)
 
 with open('./pyscripts/abi/token_exchange.json') as json_file: 
     exchange_FSS_abi = json.load(json_file)
-exchange_FSS = Contract.from_abi('ExchangeFSS', address="0xc9aaE2ADa5a5b650b48465B3C21FE584Bb55e18e", abi= exchange_FSS_abi)
+exchange_FSS = Contract.from_abi('ExchangeFSS', address="", abi= exchange_FSS_abi)
 #print("Deploying our token...")
 #token = local_account_admin.deploy(token_prj.token_erc20)
 #print("Token successfully deployed.")
