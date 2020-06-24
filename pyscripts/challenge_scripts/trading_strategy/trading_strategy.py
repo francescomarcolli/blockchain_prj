@@ -13,7 +13,7 @@ def telegram_bot_sendtext(bot_message):
     
     bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
     bot_chatID = '-456518436'
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&text=' + bot_message
 
     response = requests.get(send_text)
 
@@ -56,8 +56,8 @@ with open('../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json') 
     exchange_AA_abi = json.load(json_file)
 exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e064c61FDAea6629Db2', abi=exchange_AA_abi)
 
-df_CST = pd.read_csv(r'./token_price.csv', sep='\t', index_col=0, usecols=[0, 1])
-df_AA = pd.read_csv(r'./token_price.csv', sep='\t',  index_col=0, usecols=[0, 2])
+df_CST = pd.read_csv(r'./token_prices.csv', sep='\t', index_col=0, usecols=[0, 1])
+df_AA = pd.read_csv(r'./token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2], nrows=8760)
 start = datetime.datetime(2020, 6, 18, 9)
 
 while True: 
@@ -106,6 +106,7 @@ while True:
                 payCoin.increaseAllowance(exchange_CST.address, amountToBuy, {'from': local_account_trading})
                 exchange_CST.buy(amountToBuy)
             except:
+                telegram_bot_sendtext("Trading failed while buying CST tokens! \nError: {} \nCheck asap!".format(Exception))
                 continue
 
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] < trading_positions_final_CST.iloc[-2]['TokenCST']): 
@@ -115,6 +116,7 @@ while True:
                 token_CST.increaseAllowance(exchange_CST.address, balance_CST, {'from': local_account_trading})
                 exchange_CST.sell(balance_CST)
             except:
+                telegram_bot_sendtext("Trading failed while selling CST tokens! \nError: {} \nCheck asap!".format(Exception))
                 continue
 
         ## TokenAA
@@ -139,6 +141,7 @@ while True:
                 payCoin.increaseAllowance(exchange_AA.address, amountToBuy, {'from': local_account_trading})
                 exchange_AA.buy(amountToBuy)
             except:
+                telegram_bot_sendtext("Trading failed while buying AA tokens! \nError: {} \nCheck asap!".format(Exception))
                 continue
     
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] < trading_positions_final_AA.iloc[-2]['TokenAA']): 
@@ -148,6 +151,7 @@ while True:
                 token_AA.increaseAllowance(exchange_AA.address, balance_AA, {'from': local_account_trading})
                 exchange_AA.sell(balance_AA)
             except:
+                telegram_bot_sendtext("Trading failed while selling AA tokens! \nError: {} \nCheck asap!".format(Exception))
                 continue
 
         time.sleep(random.randrange(300, 600))
