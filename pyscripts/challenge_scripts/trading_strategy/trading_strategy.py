@@ -102,7 +102,7 @@ while True:
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] > trading_positions_final_CST.iloc[-2]['TokenCST']): 
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) 
+            amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) / exchange_CST.lastPrice()[1]
             try: 
                 payCoin.increaseAllowance(exchange_CST.address, myBalance, {'from': local_account_trading})
                 exchange_CST.buy(amountToBuy, {'from': local_account_trading})
@@ -139,7 +139,7 @@ while True:
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] > trading_positions_final_AA.iloc[-2]['TokenAA']): 
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance)
+            amountToBuy = (1/2) * (myBalance - (2/1000)*myBalance) / exchange_AA.lastPrice()[1]
             try: 
                 payCoin.increaseAllowance(exchange_AA.address, myBalance, {'from': local_account_trading})
                 exchange_AA.buy(amountToBuy, {'from': local_account_trading})
