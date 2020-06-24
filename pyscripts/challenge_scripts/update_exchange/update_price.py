@@ -52,7 +52,7 @@ while True:
         
         price = Wei(f"{df.iloc[i]['delta']} ether")
         try: 
-            exchange.setNewPrice(price, {'from': local_account_admin})
+            exchange.setNewPrice(price, {'from': local_account_admin, 'gas_price': Wei("5 gwei")})
         except: 
             telegram_bot_sendtext("Couldn't load price correctly, please check asap!")
             continue 
