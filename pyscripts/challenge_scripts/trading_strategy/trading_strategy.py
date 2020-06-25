@@ -54,8 +54,8 @@ exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e0
 
 df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenCST_prices.csv', sep='\t', index_col=0)
 df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenAA_prices.csv', sep='\t',  index_col=0)
-start = datetime.datetime(2020, 6, 25, 9)
-telegram_bot_sendtext("All good, starting trading!")
+start = datetime.datetime(2020, 6, 24, 9)
+telegram_bot_sendtext("Script: trading_strategy.py \nAll good, starting trading!")
 
 while True: 
     
@@ -170,7 +170,7 @@ while True:
         start = start + datetime.timedelta(hours=24)
         telegram_bot_sendtext("Script: trading_strategies.py \nTrading day finished. \nGoing to sleep, goodnight <3")
         while(datetime.datetime.now() <= start): 
-            time.sleep(3600)
+            time.sleep(1800)
         telegram_bot_sendtext("Script: trading_strategies.py \nGoodmorning <3 \nRise and shine!. \nLet me drink my coffee and I will start trading.")
 
     if(datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)): 
