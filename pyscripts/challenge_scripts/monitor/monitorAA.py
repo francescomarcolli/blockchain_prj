@@ -80,7 +80,10 @@ def monitorContract(web3Contract, blockNumber):
 
     for event_data in all_events: 
         tx_hash = event_data['transactionHash'].hex()
-        receipt = web3.eth.getTransactionReceipt(tx_hash)
+        try:
+            receipt = web3.eth.getTransactionReceipt(tx_hash)
+        except: 
+            continue
         events = [event['name'] for event in web3Contract.events._events]
         logs = [ web3Contract.events.__dict__[event_name]().processReceipt(receipt) for event_name in events ]
         readLog(tx_hash, logs)
