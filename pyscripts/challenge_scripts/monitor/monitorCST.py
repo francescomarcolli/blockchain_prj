@@ -19,13 +19,15 @@ def readLog(tx_hash, logs):
                 if(log_entry['args']['challenger'] == local_account_trading.address or log_entry['args']['challenged'] == local_account_trading.address):
                     flag = log_entry['args']['_flag']
                     telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nChallenged: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger'],log_entry['args']['challenged']))
-                    time.sleep(290)
+                    payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
+                    time.sleep(280)
+                    while(brownieContract.winDirectChallenge.call(flag, {'from': local_account_trading}) == False):
+                        time.sleep(5)
                     try: 
                         telegram_bot_sendtext("Script: monitorCST.py \nSending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                        payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
                         brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
                     except Exception as e: 
-                        telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\n The error was: {}".format(brownieContract.address, e))
+                        telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                         continue
             
             if(log_entry['event'] == 'DirectChallengeWon'): 
@@ -39,13 +41,15 @@ def readLog(tx_hash, logs):
             if(log_entry['event'] == 'TeamChallenge'): 
                 flag = log_entry['args']['flag']
                 telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger']))
-                time.sleep(290)
+                payCoin.increaseAllowance(brownieContract.address, 200e18, {'from': local_account_trading})
+                time.sleep(280)
+                while(brownieContract.winTeamChallenge.call(flag, {'from': local_account_trading}) == False):
+                        time.sleep(5)
                 try: 
                     telegram_bot_sendtext("Script: monitorCST.py \nSending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                    payCoin.increaseAllowance(brownieContract.address, 200e18, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
                     brownieContract.winTeamChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
                 except Exception as e: 
-                    telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\n The error was: {}".format(brownieContract.address, e))
+                    telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                     continue
             
             if(log_entry['event'] == 'TeamChallengeWon'): 
