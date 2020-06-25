@@ -29,10 +29,6 @@ with open('/local/scratch/simonepirota/blockchain/blockchain_prj/pyscripts/abi/t
     exchange_abi = json.load(json_file)
 exchange = Contract.from_abi('Exchange', address="0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110", abi=exchange_abi, owner= local_account_admin)
 
+lastPrice = exchange.lastPrice()
 
-try:
-    telegram_bot_sendtext("Rotating the hours of the market...")
-    exchange.setOpenTime()
-    telegram_bot_sendtext("Rotate complete, goodnight <3")
-except Exception as e: 
-    telegram_bot_sendtext("Something went wrong: {}".format(e))
+telegram_bot_sendtext("Last id_price is: {} \nLast price: {}".format(lastPrice[0], lastPrice[1]))
