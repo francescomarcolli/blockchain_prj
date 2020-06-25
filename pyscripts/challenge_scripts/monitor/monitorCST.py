@@ -25,7 +25,7 @@ def readLog(tx_hash, logs):
                         time.sleep(5)
                     try: 
                         telegram_bot_sendtext("Script: monitorCST.py \nSending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
                     except Exception as e: 
                         telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                         continue
@@ -47,7 +47,7 @@ def readLog(tx_hash, logs):
                         time.sleep(5)
                 try: 
                     telegram_bot_sendtext("Script: monitorCST.py \nSending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
                 except Exception as e: 
                     telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                     continue
@@ -141,7 +141,7 @@ if(brownieContract.address == teamAddresses['teamCST']['exchangeAddress']):
 startBlock = web3.eth.blockNumber 
 # telegram_bot_sendtext("Initial block: {}".format(startBlock))
 # start monitoring the contract on the blockchain
-telegram_bot_sendtext("Start monitoring contract: {}".format(brownieContract.address))
+telegram_bot_sendtext("Script: monitorCST.py \nStart monitoring contract: {}".format(brownieContract.address))
 while True: 
     monitorContract(web3Contract, startBlock)
 
@@ -154,9 +154,9 @@ while True:
             challengeCST = Contract.from_abi('ChallengeCST', address= teamAddresses['teamCST']['challengeAddress'], abi= challengeCSTabi)
             try:
                 telegram_bot_sendtext("Script: monitorCST.py \nTrying to catch the whale on contract: {}".format(brownieContract.address))
-                challengeCST.overnightCheck(id_lastPrice, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+                challengeCST.overnightCheck(id_lastPrice, {'from': local_account_trading, 'gas_price': Wei("20 gwei")})
             except Exception as e:
-                telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\n The error was: {}".format(brownieContract.address, e))
+                telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                 continue
 
     startBlock = web3.eth.blockNumber

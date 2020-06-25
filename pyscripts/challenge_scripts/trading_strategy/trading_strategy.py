@@ -52,9 +52,9 @@ with open('../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json') 
     exchange_AA_abi = json.load(json_file)
 exchange_AA = Contract.from_abi('ExchangeAA', address='0x5b349092f8F7A4f033743e064c61FDAea6629Db2', abi=exchange_AA_abi)
 
-df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t', index_col=0, usecols=[0, 1])
-df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/token_prices.csv', sep='\t',  index_col=0, usecols=[0, 2], nrows=8831)
-start = datetime.datetime(2020, 6, 24, 9)
+df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenCST_prices.csv', sep='\t', index_col=0)
+df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenAA_prices.csv', sep='\t',  index_col=0)
+start = datetime.datetime(2020, 6, 25, 9)
 telegram_bot_sendtext("All good, starting trading!")
 
 while True: 
@@ -68,7 +68,7 @@ while True:
         price_valueCST = thx_priceCST[1] 
 
         if(df_CST.iloc[-1]['TokenCST'] != price_valueCST): 
-            df_temp = pd.DataFrame([price_valueCST], index=[datetime.datetime.now()], columns=['TokenCST'])
+            df_temp = pd.DataFrame([price_valueCST], index=[datetime.datetime.now().replace(microsecond=0)], columns=['TokenCST'])
             df_CST = df_CST.append(df_temp)
 
         # Token AA
@@ -77,7 +77,7 @@ while True:
         price_valueAA = thx_priceAA[1]
 
         if(df_AA.iloc[-1]['TokenAA'] != price_valueAA): 
-            df_temp = pd.DataFrame([price_valueAA], index=[datetime.datetime.now()], columns=['TokenAA'])
+            df_temp = pd.DataFrame([price_valueAA], index=[datetime.datetime.now().replace(microsecond=0)], columns=['TokenAA'])
             df_AA = df_AA.append(df_temp)
 
         # MA Trading Strategy
@@ -164,13 +164,13 @@ while True:
         time.sleep(random.randrange(300, 600))
     else: 
         # butta il df sul csv
-        df_final = df_CST.join(df_AA)
-        df_final.to_csv('./token_prices.csv', sep='\t')
+        df_CST.to_csv('./pyscripts/challenge_scripts/trading_strategy/tokenCST_prices.csv', sep='\t')
+        df_AA.to_csv('./pyscripts/challenge_scripts/trading_strategy/tokenAA_prices.csv', sep='\t')
         # aggiorna l'ora d'inizio alle 9 del giorno dopo
         start = start + datetime.timedelta(hours=24)
         telegram_bot_sendtext("Script: trading_strategies.py \nTrading day finished. \nGoing to sleep, goodnight <3")
         while(datetime.datetime.now() <= start): 
-            time.sleep(600)
+            time.sleep(3600)
         telegram_bot_sendtext("Script: trading_strategies.py \nGoodmorning <3 \nRise and shine!. \nLet me drink my coffee and I will start trading.")
 
     if(datetime.datetime.now() > datetime.datetime(2020, 7, 1, 18)): 
