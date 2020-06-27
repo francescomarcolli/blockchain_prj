@@ -22,7 +22,7 @@ def readLog(tx_hash, logs):
                     flag = log_entry['args']['_flag']
                     telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nChallenged: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger'],log_entry['args']['challenged']))
                     payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})
-                    time.sleep(290)
+                    time.sleep(294)
                     #while(brownieContract.winDirectChallenge.call(flag, {'from': local_account_trading}) == False):
                     #    time.sleep(5)
                     try: 
@@ -44,7 +44,7 @@ def readLog(tx_hash, logs):
                 flag = log_entry['args']['flag']
                 telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger']))
                 payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
-                time.sleep(290)
+                time.sleep(294)
                 #while(brownieContract.winTeamChallenge.call(flag, {'from': local_account_trading}) == False):
                 #        time.sleep(5)
                 try: 
@@ -108,7 +108,7 @@ local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account,
 
 teamAddresses = {
                  'teamCST': {'exchangeAddress': '0xf6595CF80173Edf534469B15170370AbFF3FDdAb', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamCST/abi/Exchange.json', 'challengeAddress': '0x0b6019c547Ba293eBD74991217354b1281209985', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamCST/abi/Challenge.json'}, 
-                 'teamAA' : {'exchangeAddress': '0x5b349092f8F7A4f033743e064c61FDAea6629Db2', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json', 'challengeAddress': '0x40DbeAc4192FCF3901c9B42aDEeDD28B15F8961F', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamAA/abi/real/challenge.json'},
+                 'teamAA' : {'exchangeAddress': '0xA4b9d6A91867EAB4dDa837344a34b524F3cCB678', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamAA/abi/real/exchange.json', 'challengeAddress': '0x20BBCe5ee9Bc741C4560BC2985D008c4654978ED', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamAA/abi/real/challenge.json'},
                  'teamFSS' : {'exchangeAddress': '0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110', 'exchangeAbi': '../blockchain_course_unimi/challenge/teamFSS/Contract_Abis/token_exchange.json', 'challengeAddress': '0x1d935B72E9AC4823BA0e1D71f70DFE51836858fF', 'challengeAbi' : '../blockchain_course_unimi/challenge/teamFSS/Contract_Abis/token_challenge.json'}
                 }
 
@@ -119,7 +119,7 @@ if (len(sys.argv) < 2):
 
 #read arguments
 [address, abi_file] = sys.argv[1:3]
-poll_interval = 10
+poll_interval = 5
 if (len(sys.argv) > 3):
     poll_interval = int(sys.argv[3]) 
 

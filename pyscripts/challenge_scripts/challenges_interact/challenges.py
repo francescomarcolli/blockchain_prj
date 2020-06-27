@@ -2,6 +2,8 @@ from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
 import time, json, random, datetime, requests
 
+from web3.gas_strategies.time_based import fast_gas_price_strategy
+
 # Script that interacts with the various challenge smart contracts and launch them 
 # (monitorRopsten.py will try to win them)
 
@@ -29,6 +31,8 @@ fss_admin_private_key = "ede4dd8a3584fd7809a5e0bb299ff8f51983af5b1a9f1f506165b5c
 fss_admin_account = web3.eth.account.from_key(private_key=fss_admin_private_key)
 local_account_admin = LocalAccount(fss_admin_account.address, fss_admin_account, fss_admin_account.privateKey)
 
+web3.eth.setGasPriceStrategy(fast_gas_price_strategy)
+
 # Opening the contracts 
 with open('./pyscripts/abi/PayCoin.json') as json_file: 
     pc_abi = json.load(json_file)
@@ -40,7 +44,7 @@ challenge_CST = Contract.from_abi('ChallengeCST', address="0x0b6019c547Ba293eBD7
 
 with open('../blockchain_course_unimi/challenge/teamAA/abi/real/challenge.json') as json_file: 
     challenge_AA_abi = json.load(json_file)
-challenge_AA = Contract.from_abi('ChallengeAA', address="0x40DbeAc4192FCF3901c9B42aDEeDD28B15F8961F", abi= challenge_AA_abi)
+challenge_AA = Contract.from_abi('ChallengeAA', address="0x20BBCe5ee9Bc741C4560BC2985D008c4654978ED", abi= challenge_AA_abi)
 
 with open('./pyscripts/abi/token_challenge.json') as json_file: 
     challenge_FSS_abi = json.load(json_file)
@@ -67,22 +71,6 @@ while True:
                 contract.Register(local_account_trading.address)
             else: 
                 telegram_bot_sendtext("Script: challenges.py \nAlready registered on contract: {}".format(contract.address))
-
-    # Launching PriceOvernight (I'm a WHAAALE)
-    #lastPrice = exchange_FSS.lastPrice()[1]
-    #_lastCall = datetime.datetime.now() - datetime.timedelta(hours= 50)
-    #if(not(exchange_FSS.isOpen()) and _overnightCalls <= 4 and _lastCall < _lastCall + datetime.timedelta(hours= 48)):
-    #    delta_price = random.randint(lastPrice - (8*lastPrice/100), lastPrice + (8*lastPrice/100)) 
-    #    telegram_bot_sendtext("lastPrice: {} \nDelta price: {}".format(lastPrice, delta_price))
-    #    break
-    #    try:
-    #        telegram_bot_sendtext("Whaling cause it's fun!")
-    #        challenge_FSS.overnightStart(delta_price, {'from': local_account_trading})
-    #    except Exception as e: 
-    #        telegram_bot_sendtext("Contract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
-    #        continue
-    #    _overnightCalls = _overnightCalls + 1
-    #    _lastCall = datetime.datetime.now()
     
     # Launching DirectChallenge
     
@@ -95,9 +83,26 @@ while True:
             challenge_FSS.challengeStart(challengedAddress, directFlag, {'from': local_account_trading})
         except Exception as e: 
             telegram_bot_sendtext("Script: challenges.py \nContract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
-            continue
+            
+
+        telegram_bot_sendtext("Script: challenges.py \nDirectChallenge started: {} vs {} \nNow sleeping 5 minutes...".format(local_account_trading.address, challengedAddress))
+
+        time.sleep(299)
+
+        telegram_bot_sendtext(
+            "Script: challenges.py \nSending the transaction to win the challenge..."
+        )
+        try: 
+            challenge_FSS.winDirectChallenge(directFlag, {'from': local_account_trading})
+        except Exception as e: 
+            telegram_bot_sendtext(
+                "Script: challenges.py \nSomething went wrong while trying to win the challenge. \nError: {}".format(e)
+            )
+        telegram_bot_sendtext(
+            "Script: challenges.py \nTransaction sent, hope we won!"
+        )
     
-    time.sleep(random.randint(21600, 28800))
+    time.sleep(random.randint(7200, 10800))
     # Launching TeamChallenge
 
     teamFlag = random.randrange(1e18)
@@ -108,9 +113,29 @@ while True:
             challenge_FSS.challengeStart(teamFlag, {'from': local_account_trading})
         except Exception as e:
             telegram_bot_sendtext("Script: challenges.py \nContract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
-            continue
+
+        telegram_bot_sendtext(
+            "Script: challenges.py \nTeamChallenge started: us vs the world! \nNow sleeping 5 minutes..."
+        )
+
+        time.sleep(299)
+
+        telegram_bot_sendtext(
+            "Script: challenges.py \nSending the transaction to win the challenge..."
+        )
+        try:                
+            challenge_FSS.winTeamChallenge(teamFlag, {'from': local_account_trading})
+        except Exception as e: 
+            telegram_bot_sendtext(
+                "Script: challenges.py \nSomething went wrong while trying to win the challenge. \nError: {}".format(e)
+            )
+
+        telegram_bot_sendtext(
+            "Script: challenges.py \nTransaction sent, hope we won!"
+        )
+            
     
-    time.sleep(random.randint(21600, 28800))
+    time.sleep(random.randint(7200, 10800))
 
 
 
