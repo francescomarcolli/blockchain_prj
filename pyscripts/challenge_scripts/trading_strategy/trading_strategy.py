@@ -177,8 +177,8 @@ while True:
     
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] < trading_positions_final_AA.iloc[-2]['TokenAA']): 
             # Sell (remember allowances!) all of our Token_AA
-           balance_AA = token_AA.balanceOf(local_account_trading.address)
-           try:
+            balance_AA = token_AA.balanceOf(local_account_trading.address)
+            try:
                 if(token_AA.allowance(local_account_trading.address, exchange_AA.address) < balance_AA):
                     token_AA.increaseAllowance(exchange_AA.address, balance_AA, {'from': local_account_trading})
                 exchange_AA.sell(balance_AA, {'from': local_account_trading})
