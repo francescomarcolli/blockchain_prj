@@ -2,6 +2,8 @@ from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
 import json, time, sys, datetime, requests
 
+from web3.gas_strategies.time_based import fast_gas_price_strategy                                                                                                                        
+
 def telegram_bot_sendtext(bot_message):
     
     bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
@@ -19,13 +21,13 @@ def readLog(tx_hash, logs):
                 if(log_entry['args']['challenger'] == local_account_trading.address or log_entry['args']['challenged'] == local_account_trading.address):
                     flag = log_entry['args']['_flag']
                     telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nChallenged: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger'],log_entry['args']['challenged']))
-                    payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+                    payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})
                     time.sleep(290)
                     #while(brownieContract.winDirectChallenge.call(flag, {'from': local_account_trading}) == False):
                     #    time.sleep(5)
                     try: 
                         telegram_bot_sendtext("Script: monitorCST.py \nSending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("50 gwei")})
+                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading})
                     except Exception as e: 
                         telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                         continue
@@ -41,13 +43,13 @@ def readLog(tx_hash, logs):
             if(log_entry['event'] == 'TeamChallenge'): 
                 flag = log_entry['args']['flag']
                 telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger']))
-                payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+                payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
                 time.sleep(290)
                 #while(brownieContract.winTeamChallenge.call(flag, {'from': local_account_trading}) == False):
                 #        time.sleep(5)
                 try: 
                     telegram_bot_sendtext("Script: monitorCST.py \nSending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("50 gwei")})
+                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading})
                 except Exception as e: 
                     telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                     continue
@@ -142,6 +144,9 @@ startBlock = web3.eth.blockNumber
 # telegram_bot_sendtext("Initial block: {}".format(startBlock))
 # start monitoring the contract on the blockchain
 telegram_bot_sendtext("Script: monitorCST.py \nStart monitoring contract: {}".format(brownieContract.address))
+
+web3.eth.setGasPriceStrategy(fast_gas_price_strategy)
+
 while True: 
     monitorContract(web3Contract, startBlock)
 
@@ -154,7 +159,7 @@ while True:
             challengeCST = Contract.from_abi('ChallengeCST', address= teamAddresses['teamCST']['challengeAddress'], abi= challengeCSTabi)
             try:
                 telegram_bot_sendtext("Script: monitorCST.py \nTrying to catch the whale on contract: {}".format(brownieContract.address))
-                challengeCST.overnightCheck(id_lastPrice, {'from': local_account_trading, 'gas_price': Wei("20 gwei")})
+                challengeCST.overnightCheck(id_lastPrice, {'from': local_account_trading})
             except Exception as e:
                 telegram_bot_sendtext("Script: monitorCST.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
                 continue

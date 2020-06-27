@@ -5,6 +5,8 @@ import datetime, random, json, time, requests
 from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
 
+from web3.gas_strategies.time_based import fast_gas_price_strategy
+
 def telegram_bot_sendtext(bot_message):
     
     bot_token = '1262543569:AAEX0QVuvGpyooBG5R3Cztq1wwdaDAcZwQ4'
@@ -57,6 +59,8 @@ df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenCST_p
 start = datetime.datetime(2020, 6, 27, 9)
 telegram_bot_sendtext("Script: trading_strategy.py \nAll good, starting trading!")
 
+web3.eth.setGasPriceStrategy(fast_gas_price_strategy)
+
 while True: 
     
     if(datetime.datetime.now() >=  start and datetime.datetime.now() < start + datetime.timedelta(hours=9)): 
@@ -107,34 +111,34 @@ while True:
 
                 amountToBuy = amountToBuy/10
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #1 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #2 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #3 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #4 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #5 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #6 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #7 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #8 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #9 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #10 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
 
                 #telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
@@ -148,7 +152,7 @@ while True:
             try: 
                 if(token_CST.allowance(local_account_trading.address, exchange_CST.address) < balance_CST):
                     token_CST.increaseAllowance(exchange_CST.address, balance_CST, {'from': local_account_trading})
-                exchange_CST.sell(balance_CST, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+                exchange_CST.sell(balance_CST, {'from': local_account_trading})
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST sold: {}".format(balance_CST))
             except Exception as e:
                 telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while selling CST tokens! \nError: {} \nCheck asap!".format(e))
@@ -180,34 +184,34 @@ while True:
                 
 #                amountToBuy = amountToBuy/10
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #1 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #2 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #3 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #4 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #5 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #               telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #6 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #7 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #8 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #9 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading, 'gas_price': Wei("10 gwei")})
+#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #10 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
                 
 #            except Exception as e:
@@ -220,7 +224,7 @@ while True:
 #           try:
 #                if(token_AA.allowance(local_account_trading.address, exchange_AA.address) < balance_AA):
 #                    token_AA.increaseAllowance(exchange_AA.address, balance_AA, {'from': local_account_trading})
-#                exchange_AA.sell(balance_AA, {'from': local_account_trading, 'gas_price': Wei("5 gwei")})
+#                exchange_AA.sell(balance_AA, {'from': local_account_trading})
 #                telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA sold: {}".format(balance_AA))
 #            except Exception as e:
 #                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while selling AA tokens! \nError: {} \nCheck asap!".format(e))
