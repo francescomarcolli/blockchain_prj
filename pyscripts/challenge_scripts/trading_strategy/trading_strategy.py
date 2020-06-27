@@ -104,42 +104,21 @@ while True:
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
             amountToBuy = ((myBalance-(2/1000)*myBalance)/(2*price_valueCST))*10**18
+            pacAllowancesCST = amountToBuy * price_valueCST
 
             try: 
-                if(payCoin.allowance(local_account_trading.address, exchange_CST.address) < amountToBuy):
-                    payCoin.increaseAllowance(exchange_CST.address, amountToBuy, {'from': local_account_trading})
+                if(payCoin.allowance(local_account_trading.address, exchange_CST.address) < pacAllowancesCST):
+                    payCoin.increaseAllowance(exchange_CST.address, pacAllowancesCST, {'from': local_account_trading})
+            except Exception as e: 
+                telegram_bot_sendtext("Script: trading_strategies.py \nFailed to set allowances! \nAllowance: {} \nError: {} \nCheck asap!".format(payCoin.allowance(local_account_trading.address, exchange_CST.address), e))
+                continue
 
+            try: 
                 amountToBuy = amountToBuy/10
 
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #1 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #2 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #3 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #4 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #5 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #6 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #7 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #8 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #9 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
-
-                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
-                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #10 \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
+                for i in range(1, 11):
+                    exchange_CST.buy(amountToBuy, {'from': local_account_trading})
+                    telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #{} \nTrading successfull. \nTokenCST bought: {}".format(i, amountToBuy))
 
                 #telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy))
             except Exception as e:
@@ -177,42 +156,19 @@ while True:
             # Buy exactly amount of token that costs half of our PCO balance 
 #            myBalance = payCoin.balanceOf(local_account_trading.address)
 #            amountToBuy = ((myBalance-(2/1000)*myBalance)/(2*price_valueAA))*10**18
-
+#            pacAllowancesAA = amountToBuy * price_valueAA
+#            try:
+#                if(payCoin.allowance(local_account_trading.address, exchange_AA.address) < pacAllowancesAA):
+#                    payCoin.increaseAllowance(exchange_AA.address, pacAllowancesAA, {'from': local_account_trading})
+#            except Exception as e: 
+#                telegram_bot_sendtext("Script: trading_strategies.py \nFailed to set allowances! \nAllowance: {} \nError: {} \nCheck asap!".format(payCoin.allowance(local_account_trading.address, exchange_AA.address), e))
+#                continue
 #            try: 
-#                if(payCoin.allowance(local_account_trading.address, exchange_AA.address) < amountToBuy):
-#                    payCoin.increaseAllowance(exchange_AA.address, amountToBuy, {'from': local_account_trading})
-                
 #                amountToBuy = amountToBuy/10
 
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #1 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #2 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #3 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #4 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #5 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#               telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #6 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #7 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #8 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #9 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
-
-#                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
-#                telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #10 \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy))
+#                for i in range(1, 11):
+#                    exchange_AA.buy(amountToBuy, {'from': local_account_trading})
+#                    telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #{} \nTrading successfull. \nTokenAA bought: {}".format(i, amountToBuy))
                 
 #            except Exception as e:
 #                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying AA tokens! \nPaC balance: {} \nTk amount: {} \nAllowance: {}\nError: {} \nCheck asap!".format(myBalance, amountToBuy, payCoin.allowance(local_account_trading.address, exchange_AA.address), e))
