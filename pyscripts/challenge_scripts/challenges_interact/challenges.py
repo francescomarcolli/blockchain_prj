@@ -79,63 +79,26 @@ while True:
     if(challenge_FSS.isRegistered(challengedAddress)): 
         try:
             telegram_bot_sendtext("Script: challenges.py \nChallenging {}".format(challengedAddress))
-            pc.increaseAllowance(challenge_FSS.address, 100e18, {'from': local_account_trading}) 
+            pc.increaseAllowance(challenge_FSS.address, 50e18, {'from': local_account_trading}) 
             challenge_FSS.challengeStart(challengedAddress, directFlag, {'from': local_account_trading})
+            telegram_bot_sendtext("Script: challenges.py \nDirectChallenge started: {} vs {}".format(local_account_trading.address, challengedAddress))
         except Exception as e: 
             telegram_bot_sendtext("Script: challenges.py \nContract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
-            
-
-        telegram_bot_sendtext("Script: challenges.py \nDirectChallenge started: {} vs {} \nNow sleeping 5 minutes...".format(local_account_trading.address, challengedAddress))
-
-        time.sleep(299)
-
-        telegram_bot_sendtext(
-            "Script: challenges.py \nSending the transaction to win the challenge..."
-        )
-        try: 
-            challenge_FSS.winDirectChallenge(directFlag, {'from': local_account_trading})
-        except Exception as e: 
-            telegram_bot_sendtext(
-                "Script: challenges.py \nSomething went wrong while trying to win the challenge. \nError: {}".format(e)
-            )
-        telegram_bot_sendtext(
-            "Script: challenges.py \nTransaction sent, hope we won!"
-        )
-    
-    time.sleep(random.randint(7200, 10800))
+  
+    time.sleep(random.randint(1800, 5400))
     # Launching TeamChallenge
 
     teamFlag = random.randrange(1e18)
     if(challenge_FSS.isRegistered(opponentsAddresses[0]) and challenge_FSS.isRegistered(opponentsAddresses[1])):
         try: 
             telegram_bot_sendtext("Script: challenges.py \nChallenging everyooone!")
-            pc.increaseAllowance(challenge_FSS.address, 200e18, {'from': local_account_trading})
+            pc.increaseAllowance(challenge_FSS.address, 100e18, {'from': local_account_trading})
             challenge_FSS.challengeStart(teamFlag, {'from': local_account_trading})
+            telegram_bot_sendtext("Script: challenges.py \nTeamChallenge started: us vs the world!")
         except Exception as e:
             telegram_bot_sendtext("Script: challenges.py \nContract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
-
-        telegram_bot_sendtext(
-            "Script: challenges.py \nTeamChallenge started: us vs the world! \nNow sleeping 5 minutes..."
-        )
-
-        time.sleep(299)
-
-        telegram_bot_sendtext(
-            "Script: challenges.py \nSending the transaction to win the challenge..."
-        )
-        try:                
-            challenge_FSS.winTeamChallenge(teamFlag, {'from': local_account_trading})
-        except Exception as e: 
-            telegram_bot_sendtext(
-                "Script: challenges.py \nSomething went wrong while trying to win the challenge. \nError: {}".format(e)
-            )
-
-        telegram_bot_sendtext(
-            "Script: challenges.py \nTransaction sent, hope we won!"
-        )
-            
-    
-    time.sleep(random.randint(7200, 10800))
+ 
+    time.sleep(random.randint(1800, 5400))
 
 
 

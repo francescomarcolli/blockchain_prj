@@ -2,7 +2,7 @@ from brownie import web3, network, Wei, Contract, project
 from brownie.network.account import LocalAccount
 import json, time, sys, datetime, requests
 
-from web3.gas_strategies.time_based import fast_gas_price_strategy  
+#from web3.gas_strategies.time_based import fast_gas_price_strategy  
 
 def telegram_bot_sendtext(bot_message):
     
@@ -15,22 +15,39 @@ def telegram_bot_sendtext(bot_message):
     return response.json()
 
 def readLog(tx_hash, logs):
+    pacBalance = payCoin.balanceOf(local_account_trading.address)
     for log in logs:
         for log_entry in log:
-            #if(log_entry['event'] == 'DirectChallenge'): 
-            #    if(log_entry['args']['challenger'] == local_account_trading.address or log_entry['args']['challenged'] == local_account_trading.address):
-            #        flag = log_entry['args']['_flag']
-            #        telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nChallenged: {} \nSleeping a bit, like 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger'],log_entry['args']['challenged']))
-            #        payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading})
-            #        time.sleep(290)
-                    #while(brownieContract.winDirectChallenge.call(flag, {'from': local_account_trading}) == False):
-                    #    time.sleep(5)
-            #        try: 
-            #            telegram_bot_sendtext("Script: monitorFSS.py \nSending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))               
-            #            brownieContract.winDirectChallenge(flag, {'from': local_account_trading})
-            #        except Exception as e: 
-            #            telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
-            #            continue
+            if(log_entry['event'] == 'DirectChallenge'): 
+                if(log_entry['args']['challenger'] == local_account_trading.address or log_entry['args']['challenged'] == local_account_trading.address):
+                    flag = log_entry['args']['_flag']
+
+                    try:
+                        blockTime = web3.eth.getBlock(log_entry['blockNumber'])['timestamp'] 
+                        lag = time.time() - blockTime
+                    except: 
+                        lag = 10
+                    
+                    telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nChallenged: {} \nSleeping a bit, like 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger'],log_entry['args']['challenged']))
+                    
+                    before_tx = time.time()
+                    payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading, 'gas_price': Wei("50 gwei")})
+                    mining_time = time.time() - before_tx
+
+                    sleeping_time = 310.75 - lag - mining_time
+                    telegram_bot_sendtext("Sleepint time: {} \nLag: {} \nMining time: {}".format(sleeping_time, lag, mining_time))
+                    time.sleep(sleeping_time)
+                    
+                    try: 
+                        telegram_bot_sendtext("Script: monitorFSS.py \nSending the transaction to win the direct challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))               
+                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("50 gwei")})
+                        newBalance = payCoin.balanceOf(local_account_trading.address)
+                        if(newBalance > pacBalance - int(60e18) and newBalance < pacBalance - int(40e18)): 
+                            telegram_bot_sendtext("Script: monitorFSS.py \nProbably sent too early! \nRe-sending.")
+                            brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("75 gwei")})
+                    except Exception as e: 
+                        telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
+                        continue
             
             if(log_entry['event'] == 'DirectChallengeWon'): 
                 winner = log_entry['args']['winner']
@@ -40,19 +57,34 @@ def readLog(tx_hash, logs):
                 else: 
                     telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {} \nEvent: {} \nThe direct challenge was won by: {} \nAmount won: {} \nUffi!".format(brownieContract.address, log_entry['event'], winner, amount))
             
-            #if(log_entry['event'] == 'TeamChallenge'): 
-            #    flag = log_entry['args']['_flag']
-            #    telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nSleeping 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger']))
-            #    payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading})
-            #    time.sleep(290)
-                #while(brownieContract.winTeamChallenge.call(flag, {'from': local_account_trading}) == False):
-                #    time.sleep(5)
-            #    try: 
-            #        telegram_bot_sendtext("Script: monitorFSS.py \nSending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))
-            #        brownieContract.winTeamChallenge(flag, {'from': local_account_trading})
-            #    except Exception as e: 
-            #        telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
-            #        continue
+            if(log_entry['event'] == 'TeamChallenge'): 
+                flag = log_entry['args']['_flag']
+                try:
+                    blockTime = web3.eth.getBlock(log_entry['blockNumber'])['timestamp'] 
+                    lag = time.time() - blockTime
+                except: 
+                    lag = 10
+                    
+                telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nSleeping a bit, like 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger']))
+                    
+                before_tx = time.time()
+                payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading, 'gas_price': Wei("50 gwei")})
+                mining_time = time.time() - before_tx
+
+                sleeping_time = 310.75 - lag - mining_time
+                telegram_bot_sendtext("Sleepint time: {} \nLag: {} \nMining time: {}".format(sleeping_time, lag, mining_time))
+                time.sleep(sleeping_time)
+                    
+                try: 
+                    telegram_bot_sendtext("Script: monitorFSS.py \nSending the transaction to win the team challenge launched by {} on the contract {}".format(log_entry['args']['challenger'], brownieContract.address))               
+                    brownieContract.winTeamChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("50 gwei")})
+                    newBalance = payCoin.balanceOf(local_account_trading.address)
+                    if(newBalance > pacBalance - int(110e18) and newBalance < pacBalance -int(90e18)): 
+                        telegram_bot_sendtext("Script: monitorFSS.py \nProbably sent too early! \nRe-sending.")
+                        brownieContract.winDirectChallenge(flag, {'from': local_account_trading, 'gas_price': Wei("75 gwei")})
+                except Exception as e: 
+                    telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {}\nThe error was: {}".format(brownieContract.address, e))
+                    continue
             
             if(log_entry['event'] == 'TeamChallengeWon'): 
                 winner = log_entry['args']['winner']
@@ -118,7 +150,7 @@ if (len(sys.argv) < 2):
 
 #read arguments
 [address, abi_file] = sys.argv[1:3]
-poll_interval = 30
+poll_interval = 10
 if (len(sys.argv) > 3):
     poll_interval = int(sys.argv[3]) 
 
@@ -141,7 +173,7 @@ startBlock = web3.eth.blockNumber
 # start monitoring the contract on the blockchain
 telegram_bot_sendtext("Script: monitorFSS.py \nStart monitoring contract: {}".format(brownieContract.address))
 
-web3.eth.setGasPriceStrategy(fast_gas_price_strategy)
+#web3.eth.setGasPriceStrategy(fast_gas_price_strategy)
 
 while True: 
     monitorContract(web3Contract, startBlock)
