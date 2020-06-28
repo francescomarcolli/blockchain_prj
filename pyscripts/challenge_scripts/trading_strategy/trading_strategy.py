@@ -116,10 +116,10 @@ while True:
                 continue
 
             try: 
-                amountToBuy = amountToBuy/10
+                #amountToBuy = amountToBuy/10
 
-                for i in range(1, 11):
-                    exchange_CST.buy(amountToBuy, {'from': local_account_trading})
+                #for i in range(1, 11):
+                exchange_CST.buy(amountToBuy, {'from': local_account_trading})
                     #telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #{} \nTrading successfull. \nTokenCST bought: {}".format(i, amountToBuy))
 
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy*10))
@@ -168,10 +168,10 @@ while True:
                 continue
             
             try: 
-                amountToBuy = amountToBuy/10
+                #amountToBuy = amountToBuy/10
 
-                for i in range(1, 11):
-                    exchange_AA.buy(amountToBuy, {'from': local_account_trading})
+                #for i in range(1, 11):
+                exchange_AA.buy(amountToBuy, {'from': local_account_trading})
                     #telegram_bot_sendtext("Script: trading_strategy.py \nTransaction #{} \nTrading successfull. \nTokenAA bought: {}".format(i, amountToBuy))
 
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy*10))
