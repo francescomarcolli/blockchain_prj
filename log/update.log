@@ -1,0 +1,157 @@
+Changing price...
+Delta price: 32399999999999636000
+Transaction sent: [0;1;34m0x1817bb1882ecf1bf5c29b9cd39efa36a3733ef8eb4df30156efef75aa1e40bc0[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57012[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192694[0;m   Gas used: [0;1;34m57012[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -18799999999999727000
+Transaction sent: [0;1;34m0x7b4b105c750abf10ac32471d2b9954966025f4fea100ecf2565460cffcd08ab4[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192722[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -5300000000000182000
+Transaction sent: [0;1;34m0x4654cd54ebe765c7336a18eb4c40274f893a9eaca78cda405cdf238cb10e5a3d[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192752[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -29900000000000090000
+Transaction sent: [0;1;34m0xbebd96f6832696ea4fd3eedfe4a3a2a892e7a64161683a0db5f385a3af278b24[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192787[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -70699999999999820000
+Transaction sent: [0;1;34m0xdf5764a03121ea93e2bea546d2573aad0786d99e267fa8fdcc477c335be8ccd3[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192823[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 5800000000000182000
+Transaction sent: [0;1;34m0xa89e34259ee096c0343b103c1f3c42ee700603518997fc04126b7909630d0441[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57000[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192867[0;m   Gas used: [0;1;34m57000[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 23399999999999636000
+Transaction sent: [0;1;34m0x20eec915da83dcef0d6eac4d481f2682f81707f7f78d7196bc475a79a3b10150[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57012[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192898[0;m   Gas used: [0;1;34m57012[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -13699999999999818000
+Transaction sent: [0;1;34m0x5faed8dba875ada56e43147114703dab6aa143fe369afb41dabd44d31dd1f8f3[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192930[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 37500000000000000000
+Transaction sent: [0;1;34m0xfa17afae8d9544fd9f207ca8c81564f33fac1e87fae40cb9101d237354c5e21d[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m56988[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8192961[0;m   Gas used: [0;1;34m56988[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 11400000000000091000
+Transaction sent: [0;1;34m0x6ae30c3a8d518fca0e2832cb9d45d1cf8c1a42151dae6abc8deb1cd518df1247[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57000[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193011[0;m   Gas used: [0;1;34m57000[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 51799999999999730000
+Transaction sent: [0;1;34m0x4280d64fecbb2bc6cdd2936e7c0983d351f35f2914825bb7e10ec12c9ded0b5b[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57012[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193056[0;m   Gas used: [0;1;34m57012[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -22399999999999636000
+Transaction sent: [0;1;34m0x5ab548b110f0f14553f5a8fd4701c5709fbd22d0095f1f04fe54e0c4c201f3c1[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193094[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 2199999999999818000
+Transaction sent: [0;1;34m0xda35fb92a237712a26e221f70eba3afe3d8607a9e273044dafde881eadd633e6[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57000[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193137[0;m   Gas used: [0;1;34m57000[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -3000000000000000000
+Transaction sent: [0;1;34m0x14913c655f8e2b289c8a294e141d5a209c2562ef6a6669d439615deeeb1ce01b[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57264[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193174[0;m   Gas used: [0;1;34m57264[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -5000000000000000000
+Transaction sent: [0;1;34m0x3a9c295004bab5e29e5c5614094d26f6a54f339c91725acc51315f3473ffe92d[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57264[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193195[0;m   Gas used: [0;1;34m57264[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 36500000000000000000
+Transaction sent: [0;1;34m0x228365b59274c5df9019800cd19011899bcb918e8f373a4106639910c5a605e7[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m56988[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193241[0;m   Gas used: [0;1;34m56988[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -13199999999999818000
+Transaction sent: [0;1;34m0xd74ffd744552d3db57499d44c2bb57e10c80f3e3e18454eeb8558982a19b2d08[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193269[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -7600000000000364000
+Transaction sent: [0;1;34m0xb57f109c78ba52ccd88c50a87974ea1c78c618c30a5e98bc05f694137c110462[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193318[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -7599999999999909000
+Transaction sent: [0;1;34m0xeb907327270d4693731a9c540ee7942307f5310c0c1fe8fd5f10dc744c86f365[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193381[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 6900000000000091000
+Transaction sent: [0;1;34m0xf3642d4cb5c6beab9fb1f6b6e2c7fb8969eb6f2631ac2f72e1d1646bb04eeb93[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57000[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193414[0;m   Gas used: [0;1;34m57000[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -21800000000000182000
+Transaction sent: [0;1;34m0x7e872364ed6248d01d1287e72190b7d36d98f1675df580fd72ee1788daf5190a[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57288[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193451[0;m   Gas used: [0;1;34m57288[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: 24700000000000273000
+Transaction sent: [0;1;34m0x2ec7413aba1d1b7e69fc1fc1f6917281dff9d6915ae7d57c37e194a5dda81954[0;m
+  Gas price: [0;1;34m2.0[0;m gwei   Gas limit: [0;1;34m57012[0;m
+Waiting for confirmation...
+  Exchange.setNewPrice confirmed - Block: [0;1;34m8193499[0;m   Gas used: [0;1;34m57012[0;m ([0;1;34m100.00%[0;m)
+
+Changing price...
+Delta price: -4500000000000000000
+Transaction sent: [0;1;34m0x87e2c061b1730a1ed47f86002179ccff21fa58c23f2ae0f2fb7db1c15ceb71bd[0;m
