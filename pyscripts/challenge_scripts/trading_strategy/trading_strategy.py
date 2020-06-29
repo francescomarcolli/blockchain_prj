@@ -56,7 +56,7 @@ exchange_AA = Contract.from_abi('ExchangeAA', address='0xA4b9d6A91867EAB4dDa8373
 
 df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenCST_prices.csv', sep='\t', index_col=0)
 df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenAA_prices.csv', sep='\t',  index_col=0)
-start = datetime.datetime(2020, 6, 28, 9)
+start = datetime.datetime(2020, 6, 29, 9)
 telegram_bot_sendtext("Script: trading_strategy.py \nAll good, starting trading!")
 
 web3.eth.setGasPriceStrategy(fast_gas_price_strategy)
