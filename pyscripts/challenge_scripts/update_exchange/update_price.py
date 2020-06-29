@@ -36,13 +36,13 @@ with open("./pyscripts/abi/token_exchange.json") as json_file:
     exchange_abi = json.load(json_file)
 exchange = Contract.from_abi('Exchange', address="0x99d07b3fA4C2046a43e3911AC5a5bC3B0115b110", abi= exchange_abi, owner= local_account_admin) 
 
-df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=8830)
+df = pd.read_csv(r'./pyscripts/challenge_scripts/price_history.csv',  index_col=0, names= ['','delta'], skiprows=9130)
 #print(df)
 
 df = df.diff()
 
 i = 1
-start = datetime.datetime(2020, 6, 24, 9)
+start = datetime.datetime(2020, 6, 29, 9)
 
 while True:
 
