@@ -105,8 +105,10 @@ while True:
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] > trading_positions_final_CST.iloc[-2]['TokenCST']): 
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = int(((myBalance-int((2/1000)*myBalance))/(2*price_valueCST)))*int(10e18)            
-            pacAllowancesCST = int((amountToBuy*price_valueCST)/10e18)
+            amountToBuy = int( ( myBalance/(2*price_valueCST) ) * int(10e18))
+            cost = int((amountToBuy*price_valueCST)/10e18)
+            fee = int(cost/500)
+            pacAllowancesCST = cost + fee
 
             try: 
                 if(payCoin.allowance(local_account_trading.address, exchange_CST.address) < pacAllowancesCST):
@@ -157,8 +159,10 @@ while True:
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] > trading_positions_final_AA.iloc[-2]['TokenAA']): 
             # Buy exactly amount of token that costs half of our PCO balance 
             myBalance = payCoin.balanceOf(local_account_trading.address)
-            amountToBuy = int(((myBalance-int((2/1000)*myBalance))/(2*price_valueAA))*int(10e18))
-            pacAllowancesAA = int((amountToBuy*price_valueAA)/10e18)
+            amountToBuy = int( ( myBalance/(2*price_valueAA) ) * int(10e18))
+            cost = int((amountToBuy*price_valueAA)/10e18)
+            fee = int(cost/500)
+            pacAllowancesAA = cost + fee
             try:
                 if(payCoin.allowance(local_account_trading.address, exchange_AA.address) < pacAllowancesAA):
                     payCoin.increaseAllowance(exchange_AA.address, pacAllowancesAA, {'from': local_account_trading})
