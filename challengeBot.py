@@ -246,7 +246,7 @@ def team_ch(update, context):
             payCoin.increaseAllowance(challenge_FSS.address, 200e18, {'from': local_account_trading})
             challenge_FSS.challengeStart(teamFlag, {'from': local_account_trading})
             query.edit_message_text(
-                text="TeamChallenge started: us vs the world!"
+                text="TeamChallenge started: us vs the world! \nFlag: {}".format(teamFlag)
             )
         except Exception as e:
             query.edit_message_text(
