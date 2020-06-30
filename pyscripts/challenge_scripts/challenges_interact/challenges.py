@@ -85,7 +85,7 @@ while True:
         except Exception as e: 
             telegram_bot_sendtext("Script: challenges.py \nContract Address: {}\n The error was: {}".format(challenge_FSS.address, Exception))
   
-    time.sleep(random.randint(600, 1800))
+    time.sleep(random.randint(1800, 3600))
     # Launching TeamChallenge
 
     teamFlag = random.randrange(1e18)
@@ -98,7 +98,7 @@ while True:
         except Exception as e:
             telegram_bot_sendtext("Script: challenges.py \nContract Address: {}\n The error was: {}".format(challenge_FSS.address, e))
  
-    time.sleep(random.randint(600, 1800))
+    time.sleep(random.randint(1800, 3600))
 
 
 
