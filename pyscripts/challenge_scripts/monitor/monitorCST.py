@@ -34,7 +34,7 @@ def readLog(tx_hash, logs):
                     payCoin.increaseAllowance(brownieContract.address, 50e18, {'from': local_account_trading, 'gas_price': Wei("170 gwei"), 'gas_limit': 500000})
                     mining_time = time.time() - before_tx
 
-                    sleeping_time = 320.75 - lag - mining_time
+                    sleeping_time = 308.75 - lag - mining_time
                     telegram_bot_sendtext("Sleepint time: {} \nLag: {} \nMining time: {}".format(sleeping_time, lag, mining_time))
                     time.sleep(sleeping_time)
                     
@@ -69,10 +69,10 @@ def readLog(tx_hash, logs):
                 telegram_bot_sendtext("Script: monitorFSS.py \nContract Address: {} \nEvent: {} \nChallenger: {} \nSleeping a bit, like 5 minutes".format(brownieContract.address, log_entry['event'], log_entry['args']['challenger']))
                     
                 before_tx = time.time()
-                payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading, 'gas_price': Wei("50 gwei"), 'gas_limit': 500000})
+                payCoin.increaseAllowance(brownieContract.address, 100e18, {'from': local_account_trading, 'gas_price': Wei("150 gwei"), 'gas_limit': 500000})
                 mining_time = time.time() - before_tx
 
-                sleeping_time = 320.75 - lag - mining_time
+                sleeping_time = 308.75 - lag - mining_time
                 telegram_bot_sendtext("Sleepint time: {} \nLag: {} \nMining time: {}".format(sleeping_time, lag, mining_time))
                 time.sleep(sleeping_time)
                     
