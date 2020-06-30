@@ -126,7 +126,7 @@ while True:
 
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST bought: {}".format(amountToBuy*10))
             except Exception as e:
-                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying CST tokens! \nPaC balance: {} \nTk amount: {} \nAllowance: {} \nError: {} \nCheck asap!".format(myBalance, amountToBuy, payCoin.allowance(local_account_trading.address, exchange_CST.address), e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying CST tokens! \nPaC balance: {} \nTk amount: {} \nPrice: {} \nAllowance: {} \nError: {} \nCheck asap!".format(myBalance, amountToBuy, price_valueCST ,payCoin.allowance(local_account_trading.address, exchange_CST.address), e))
                 payCoin.decreaseAllowance(exchange_CST.address, payCoin.allowance(local_account_trading.address, exchange_CST.address), {'from': local_account_trading})
                 
 
@@ -183,7 +183,7 @@ while True:
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA bought: {}".format(amountToBuy*10))
                 
             except Exception as e:
-                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying AA tokens! \nPaC balance: {} \nTk amount: {} \nAllowance: {}\nError: {} \nCheck asap!".format(myBalance, amountToBuy, payCoin.allowance(local_account_trading.address, exchange_AA.address), e))
+                telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying AA tokens! \nPaC balance: {} \nTk amount: {} \nPrice: {} \nAllowance: {}\nError: {} \nCheck asap!".format(myBalance, amountToBuy, price_valueAA, payCoin.allowance(local_account_trading.address, exchange_AA.address), e))
                 payCoin.decreaseAllowance(exchange_AA.address, payCoin.allowance(local_account_trading.address, exchange_AA.address), {'from': local_account_trading})
                 
     
