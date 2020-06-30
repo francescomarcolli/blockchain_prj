@@ -56,7 +56,7 @@ exchange_AA = Contract.from_abi('ExchangeAA', address='0xA4b9d6A91867EAB4dDa8373
 
 df_CST = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenCST_prices.csv', sep='\t', index_col=0)
 df_AA = pd.read_csv(r'./pyscripts/challenge_scripts/trading_strategy/tokenAA_prices.csv', sep='\t',  index_col=0)
-start = datetime.datetime(2020, 6, 29, 9)
+start = datetime.datetime(2020, 6, 30, 9)
 telegram_bot_sendtext("Script: trading_strategy.py \nAll good, starting trading!")
 
 web3.eth.setGasPriceStrategy(fast_gas_price_strategy)
@@ -115,7 +115,7 @@ while True:
                     payCoin.increaseAllowance(exchange_CST.address, pacAllowancesCST, {'from': local_account_trading})
             except Exception as e: 
                 telegram_bot_sendtext("Script: trading_strategies.py \nFailed to set allowances! \nAllowance: {} \nError: {} \nCheck asap!".format(payCoin.allowance(local_account_trading.address, exchange_CST.address), e))
-                continue
+                
 
             try: 
                 #amountToBuy = amountToBuy/10
@@ -128,7 +128,7 @@ while True:
             except Exception as e:
                 telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying CST tokens! \nPaC balance: {} \nTk amount: {} \nAllowance: {} \nError: {} \nCheck asap!".format(myBalance, amountToBuy, payCoin.allowance(local_account_trading.address, exchange_CST.address), e))
                 payCoin.decreaseAllowance(exchange_CST.address, payCoin.allowance(local_account_trading.address, exchange_CST.address), {'from': local_account_trading})
-                continue
+                
 
         if(trading_positions_final_CST.iloc[-1]['TokenCST'] < trading_positions_final_CST.iloc[-2]['TokenCST']): 
             # Sell (remember allowances!) all of our Token_CST
@@ -140,7 +140,7 @@ while True:
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenCST sold: {}".format(balance_CST))
             except Exception as e:
                 telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while selling CST tokens! \nError: {} \nCheck asap!".format(e))
-                continue
+                
 
         ## TokenAA
 
@@ -170,7 +170,7 @@ while True:
 
             except Exception as e: 
                 telegram_bot_sendtext("Script: trading_strategies.py \nFailed to set allowances! \nAllowance: {} \nError: {} \nCheck asap!".format(payCoin.allowance(local_account_trading.address, exchange_AA.address), e))
-                continue
+                
 
             
             try: 
@@ -185,7 +185,7 @@ while True:
             except Exception as e:
                 telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while buying AA tokens! \nPaC balance: {} \nTk amount: {} \nAllowance: {}\nError: {} \nCheck asap!".format(myBalance, amountToBuy, payCoin.allowance(local_account_trading.address, exchange_AA.address), e))
                 payCoin.decreaseAllowance(exchange_AA.address, payCoin.allowance(local_account_trading.address, exchange_AA.address), {'from': local_account_trading})
-                continue
+                
     
         if(trading_positions_final_AA.iloc[-1]['TokenAA'] < trading_positions_final_AA.iloc[-2]['TokenAA']): 
             # Sell (remember allowances!) all of our Token_AA
@@ -197,7 +197,7 @@ while True:
                 telegram_bot_sendtext("Script: trading_strategy.py \nTrading successfull. \nTokenAA sold: {}".format(balance_AA))
             except Exception as e:
                 telegram_bot_sendtext("Script: trading_strategies.py \nTrading failed while selling AA tokens! \nError: {} \nCheck asap!".format(e))
-                continue
+                
         
         time.sleep(random.randrange(300, 600))
     else: 
